@@ -1,4 +1,4 @@
-package Homework3.q3a;
+package skiplist_proj;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

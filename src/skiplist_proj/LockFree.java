@@ -1,12 +1,10 @@
-package Homework3.q3a;
+package skiplist_proj;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
 
-public class Lock implements myDB {
+public class LockFree implements myDB {
     
-    public Lock() {
+    public LockFree() {
   
     }
 
