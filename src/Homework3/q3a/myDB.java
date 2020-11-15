@@ -1,0 +1,9 @@
+// You do NOT need to modify this file
+// The interface of the MyQueue
+// You should implement LockQueue and LockFreeQueue by extending this class
+package Homework3.q3a;
+public interface myDB {
+    // return true if successfully enqueue a new value
+    public boolean add(Integer value);
+    public boolean rm(Integer value);
+}
