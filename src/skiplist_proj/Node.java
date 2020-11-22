@@ -12,9 +12,9 @@ public class Node
     public AtomicReference<Node>[] next;
 
     // Used for Lock-Based implementation
-    private final Lock lock = new ReentrantLock();
-    public volatile boolean marked = false;
-    public volatile boolean fullyLinked = false;
+    private Lock lock = new ReentrantLock();
+    private volatile boolean marked = false;
+    private volatile boolean fullyLinked = false;
 
     /**
      * Initializes a new LockBasedNode
@@ -28,11 +28,14 @@ public class Node
         next = new AtomicReference[height];
         for (int i = 0; i < height; i++)
         {
-            next[i] = new AtomicReference<Node>();
+            next[i] = new AtomicReference<>();
         }
 
-        topLevel = height;
+        // Levels are zero-indexed. Subtract one from height.
+        topLevel = height-1;
     }
+
+    /*** Public Accessor Methods ***/
 
     /**
      * @return The value of topLevel
@@ -47,8 +50,31 @@ public class Node
      */
     public Integer getItem()
     {
-        return item;
+        return this.item;
     }
+
+    public boolean isMarked()
+    {
+        return this.marked;
+    }
+
+    public void setMarked(boolean value)
+    {
+        this.marked = value;
+    }
+
+    public boolean isFullyLinked()
+    {
+        return this.fullyLinked;
+    }
+
+    public void setFullyLinked(boolean value)
+    {
+        this.fullyLinked = value;
+    }
+
+
+    /*** Public methods ***/
 
     /**
      * Locks the node
