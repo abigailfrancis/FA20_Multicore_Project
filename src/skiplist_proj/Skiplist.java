@@ -8,6 +8,11 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public interface Skiplist {
     /**
+     * The maximum height that we will allow the Skiplist to be
+     */
+    Integer MAX_HEIGHT = 4;
+
+    /**
      * Adds a new element to the Skiplist
      * @param value the value to be added to the Skiplist
      * @return a boolean indicating whether the operation was successful
