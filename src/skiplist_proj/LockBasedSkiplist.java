@@ -1,5 +1,6 @@
 package skiplist_proj;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class LockBasedSkiplist implements Skiplist
@@ -33,7 +34,7 @@ public class LockBasedSkiplist implements Skiplist
      * @return The level where the Integer was found, or -1 if it is not present in the Skiplist
      */
     @Override
-    public Integer find(Integer value, AtomicReference<Node>[] preds, AtomicReference<Node>[] succs)
+    public Integer find(Integer value, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs)
     {
         // To begin, set the predecessor node to the HEAD of the Skiplist
         AtomicReference<Node> predecessor = head;
@@ -64,8 +65,8 @@ public class LockBasedSkiplist implements Skiplist
             }
 
             // Set the new predecessor and successor
-            preds[level] = predecessor;
-            succs[level] = curr;
+            preds.set(level, predecessor);
+            succs.set(level, curr);
         }
 
         return lFound;

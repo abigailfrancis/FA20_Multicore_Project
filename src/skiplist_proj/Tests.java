@@ -15,8 +15,8 @@ public class Tests {
     private Skiplist skiplist;
     private static int height = 4;
 
-    private static AtomicReference<Node>[] preds = new AtomicReference[height];
-    private static AtomicReference<Node>[] succs = new AtomicReference[height];
+    private static List<AtomicReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
     public Tests(Skiplist skiplist)
@@ -132,5 +132,12 @@ public class Tests {
         node18.get().next[1] = end;
 
         node25.get().next[0] = end;
+
+        // Initialize empty values for preds & succs
+        for (int i = 0; i < height; i++)
+        {
+            preds.add(i, null);
+            succs.add(i, null);
+        }
     }
 }

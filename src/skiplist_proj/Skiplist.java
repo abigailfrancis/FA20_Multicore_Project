@@ -1,5 +1,6 @@
 package skiplist_proj;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -27,5 +28,5 @@ public interface Skiplist {
      * @param succs the list of successors for the node we are searching for
      * @return The level where the value was found, otherwise -1
      */
-    Integer find(Integer value, AtomicReference<Node>[] preds, AtomicReference<Node>[] succs);
+    Integer find(Integer value, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs);
 }
