@@ -91,4 +91,20 @@ public class Node
     {
         this.lock.unlock();
     }
+
+    @Override
+    public String toString()
+    {
+        if (this.item == Integer.MAX_VALUE)
+        {
+            return "TAIL";
+        }
+
+        if (this.item == Integer.MIN_VALUE)
+        {
+            return "HEAD";
+        }
+
+        return this.item.toString();
+    }
 }

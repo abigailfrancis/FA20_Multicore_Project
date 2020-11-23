@@ -23,16 +23,17 @@ public class TestData
      */
     public static void setupEmptySkiplist(Node head)
     {
-        int height = MAX_HEIGHT;
-
         AtomicReference<Node> tail = new AtomicReference<>();
-        tail.set(new Node(Integer.MAX_VALUE, height));
+        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT));
 
         // Test Skiplist
         // Level
+        //   3        head -> tail
+        //   2        head -> tail
+        //   1        head -> tail
         //   0        head -> tail
 
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < MAX_HEIGHT; i++)
         {
             // Set all of head's 'next' values to the tail
             head.next[i] = tail;

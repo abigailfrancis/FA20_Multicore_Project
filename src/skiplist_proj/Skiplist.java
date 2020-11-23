@@ -34,4 +34,9 @@ public interface Skiplist {
      * @return The level where the value was found, otherwise -1
      */
     Integer find(Integer value, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs);
+
+    /**
+     * Display the Skiplist
+     */
+    void display();
 }
