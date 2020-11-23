@@ -1,5 +1,6 @@
 package skiplist_proj.tests;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,17 +43,23 @@ public class AddTests
         return testParams;
     }
 
+    @After
+    public void printSkiplist()
+    {
+        this.skiplist.display();
+    }
+
     @Test
     public void addIntegerToAnEmptySkiplist() {
-    // Arrange
-    TestData.setupEmptySkiplist(head);
+        // Arrange
+        TestData.setupEmptySkiplist(head);
 
-    // Act
-    boolean addSucceeded = this.skiplist.add(5);
+        // Act
+        boolean addSucceeded = this.skiplist.add(5);
 
-    // Assert
-    assertTrue(addSucceeded);
-}
+        // Assert
+        assertTrue(addSucceeded);
+    }
 
     @Test
     public void addIntegerToAFullSkiplist() {

@@ -71,7 +71,7 @@ public class LockBasedSkiplist implements Skiplist
 
                 // Starting at the bottom of the Skiplist
                 // Lock all of the predecessor nodes
-                for (int level = 0; valid && (level < topLevel); level++)
+                for (int level = 0; valid && (level <= topLevel); level++)
                 {
                     pred = preds.get(level);
                     succ = succs.get(level);
@@ -83,21 +83,21 @@ public class LockBasedSkiplist implements Skiplist
                 if (!valid) continue;
 
                 // Create the new Node
-                Node node = new Node(value, topLevel);
+                Node node = new Node(value, topLevel + 1);
                 AtomicReference<Node> newNode = new AtomicReference<>(node);
 
                 // Starting at the bottom of the Skiplist
                 // Attach the new Node's successors
-                for (int level = 0; level < topLevel; level++)
+                for (int level = 0; level <= topLevel; level++)
                 {
                     newNode.get().next[level].set(succs.get(level).get());
                 }
 
                 // Starting at the bottom of the Skiplist
                 // Attach the new Node's predecessors
-                for (int level = 0; level < topLevel; level++)
+                for (int level = 0; level <= topLevel; level++)
                 {
-                    preds.get(level).get().next[level].set(newNode.get());
+                    preds.get(level).get().next[level] = newNode;
                 }
 
                 newNode.get().setFullyLinked(true);
@@ -198,7 +198,7 @@ public class LockBasedSkiplist implements Skiplist
                     {
                         AtomicReference<Node> newSuccessor = victim.get().next[level];
                         Node predecessor = preds.get(level).get();
-                        predecessor.next[level].set(newSuccessor.get());
+                        predecessor.next[level] = newSuccessor;
                     }
 
                     // The victim has been removed, unlock it
@@ -263,6 +263,28 @@ public class LockBasedSkiplist implements Skiplist
 
         return lFound;
 	}
+
+	@Override
+    public void display()
+    {
+        System.out.println("---------------------");
+        for (int level = MAX_HEIGHT -1; level >= 0; level--)
+        {
+            System.out.print("Level " + level + ": ");
+
+            Node node = this.head.get();
+
+            while (node != null)
+            {
+                System.out.print(" -> " + node);
+                node = node.next[level].get();
+            }
+
+            System.out.println();
+        }
+        System.out.println("---------------------");
+        System.out.println();
+    }
 
     /**
      * @return The highest level (0 <= x < MAX_HEIGHT) of the Skiplist that the new node will be added to

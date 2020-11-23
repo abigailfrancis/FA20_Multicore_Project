@@ -17,4 +17,7 @@ public class LockFree implements Skiplist {
     {
         return null;
 	}
+
+	public void display()
+    {}
 }
