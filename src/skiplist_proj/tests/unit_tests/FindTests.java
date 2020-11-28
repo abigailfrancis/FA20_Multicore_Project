@@ -79,6 +79,4 @@ public class FindTests {
         // Assert
         assertTrue(level == -1);
     }
-
-    // Todo: add tests with multiple threads
 }

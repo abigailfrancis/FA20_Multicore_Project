@@ -12,8 +12,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static skiplist_proj.Skiplist.MAX_HEIGHT;
-
 public class SkiplistRunnable implements Runnable
 {
     private Integer integerToAdd;
@@ -56,9 +54,7 @@ public class SkiplistRunnable implements Runnable
         for (int i = 0; i < numChanges; i++) {
             try {
                 futures.get(i).get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException|ExecutionException e) {
                 e.printStackTrace();
             }
         }

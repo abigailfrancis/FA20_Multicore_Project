@@ -1,4 +1,4 @@
-package skiplist_proj.tests.IntegrationTests;
+package skiplist_proj.tests.integration_tests;
 
 import org.junit.After;
 import org.junit.Test;

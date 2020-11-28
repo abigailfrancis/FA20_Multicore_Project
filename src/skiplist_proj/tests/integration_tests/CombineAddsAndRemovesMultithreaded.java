@@ -56,7 +56,7 @@ public class CombineAddsAndRemovesMultithreaded
     @Test
     public void addAndRemoveLargeTest() {
         // Arrange
-        TestData.setupEmptySkiplist(this.head);
+        TestData.setupEmptySkiplist(head);
 
         // Add nodes 0-149
         int[] listOfIntegersToAdd = new int[150];
@@ -70,12 +70,12 @@ public class CombineAddsAndRemovesMultithreaded
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
 
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
 
         // Assert
         // Verify that the bottom level contains at least Node 98 and 99
         // (The rest of the nodes may or may not be present depending on when the individual threads executed)
-        Node node = this.head.next[0].get();
+        Node node = head.next[0].get();
         boolean found148 = false;
         boolean found149 = false;
         while (node.getItem() != Integer.MAX_VALUE) {
@@ -94,7 +94,7 @@ public class CombineAddsAndRemovesMultithreaded
     @Test
     public void addAndRemoveLargeTest2() {
         // Arrange
-        TestData.setupTestSkiplist1(this.head, preds, succs);
+        TestData.setupTestSkiplist1(head, preds, succs);
 
         // Add nodes 0-149
         int[] listOfIntegersToAdd = new int[150];
@@ -108,12 +108,12 @@ public class CombineAddsAndRemovesMultithreaded
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
 
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
 
         // Assert
         // Verify that the bottom level contains at least Node 98 and 99
         // (The rest of the nodes may or may not be present depending on when the individual threads executed)
-        Node node = this.head.next[0].get();
+        Node node = head.next[0].get();
         boolean found148 = false;
         boolean found149 = false;
         while (node.getItem() != Integer.MAX_VALUE)
