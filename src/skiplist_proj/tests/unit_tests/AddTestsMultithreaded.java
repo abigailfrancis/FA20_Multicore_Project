@@ -1,4 +1,4 @@
-package skiplist_proj.tests.UnitTests;
+package skiplist_proj.tests.unit_tests;
 
 import org.junit.After;
 import org.junit.Test;
@@ -56,18 +56,18 @@ public class AddTestsMultithreaded
     @Test
     public void addIntegersToAnEmptySkiplist() {
         // Arrange
-        TestData.setupEmptySkiplist(this.head);
+        TestData.setupEmptySkiplist(head);
         int[] listOfIntegersToAdd = {1, 3, 5};
         int[] listOfIntegersToRemove = {};
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
 
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
 
         // Assert
         // Verify that the bottom level has 1 -> 3 -> 5
-        Node node1 = this.head.next[0].get();
-        assertTrue(this.head.next[0].get().getItem() == 1);
+        Node node1 = head.next[0].get();
+        assertTrue(head.next[0].get().getItem() == 1);
 
         Node node2 = node1.next[0].get();
         assertTrue(node2.getItem() == 3);
@@ -82,17 +82,17 @@ public class AddTestsMultithreaded
     @Test
     public void addIntegersToAPopulatedSkiplist() {
         // Arrange
-        TestData.setupTestSkiplist1(this.head, preds, succs);
+        TestData.setupTestSkiplist1(head, preds, succs);
         int[] listOfIntegersToAdd = {7, 9, 11};
         int[] listOfIntegersToRemove = {};
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
 
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
 
         // Assert
         // Go through the bottom level of the skiplist and look for all 3 of the added integers
-        Node next = this.head.next[0].get();
+        Node next = head.next[0].get();
         int indexOfAddedItem = 0;
         int skipListLength = 0;
 
@@ -115,7 +115,7 @@ public class AddTestsMultithreaded
     @Test
     public void addLotsOfIntegersToAnEmptySkiplist() {
         // Arrange
-        TestData.setupTestSkiplist1(this.head, preds, succs);
+        TestData.setupTestSkiplist1(head, preds, succs);
 
         int[] listOfIntegersToAdd = new int[100];
         TestData.createListOfConsecutiveIntegers(listOfIntegersToAdd);
@@ -124,11 +124,11 @@ public class AddTestsMultithreaded
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
 
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
 
         // Assert
         // Go through the bottom level of the skiplist and look for all 3 of the added integers
-        Node next = this.head.next[0].get();
+        Node next = head.next[0].get();
         int indexOfAddedItem = 0;
         int skipListLength = 0;
 

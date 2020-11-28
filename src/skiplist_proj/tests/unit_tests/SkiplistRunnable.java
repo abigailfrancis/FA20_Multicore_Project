@@ -1,4 +1,4 @@
-package skiplist_proj.tests.UnitTests;
+package skiplist_proj.tests.unit_tests;
 
 import skiplist_proj.LockBasedSkiplist;
 import skiplist_proj.LockFree;
@@ -11,8 +11,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 public class SkiplistRunnable implements Runnable
 {
@@ -40,7 +38,7 @@ public class SkiplistRunnable implements Runnable
         int numRemoves = listOfIntegersToRemove.length;
         int numChanges = numAdds + numRemoves;
 
-        ExecutorService executorService = Executors.newFixedThreadPool(numChanges);
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
         List<Future> futures = new ArrayList<>();
         for (int i = 0; i < numAdds; i++) {
             futures.add(executorService.submit(new SkiplistRunnable(useLockBasedSkiplist, head, listOfIntegersToAdd[i], null)));
@@ -56,9 +54,7 @@ public class SkiplistRunnable implements Runnable
         for (int i = 0; i < numChanges; i++) {
             try {
                 futures.get(i).get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException|ExecutionException e) {
                 e.printStackTrace();
             }
         }

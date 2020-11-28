@@ -1,4 +1,4 @@
-package skiplist_proj.tests.UnitTests;
+package skiplist_proj.tests.unit_tests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,6 +79,4 @@ public class FindTests {
         // Assert
         assertTrue(level == -1);
     }
-
-    // Todo: add tests with multiple threads
 }

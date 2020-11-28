@@ -1,4 +1,4 @@
-package skiplist_proj.tests.UnitTests;
+package skiplist_proj.tests.unit_tests;
 
 import org.junit.After;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static junit.framework.Assert.assertTrue;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
-public class AddTests
+public class RemoveTests
 {
     private Skiplist skiplist;
 
@@ -25,13 +25,14 @@ public class AddTests
     private static List<AtomicReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
-    public AddTests(Skiplist skiplist)
+    public RemoveTests(Skiplist skiplist)
     {
         this.skiplist = skiplist;
     }
 
     @Parameterized.Parameters()
-    public static Collection<Skiplist> data() {
+    public static Collection<Skiplist> data()
+    {
         ArrayList<Skiplist> testParams = new ArrayList<>();
 
         // Initialize the head node
@@ -50,78 +51,65 @@ public class AddTests
         this.skiplist.display();
     }
 
-    /**
-     * Verifies behavior when one integer is added to an empty Skiplist
-     */
     @Test
-    public void addIntegerToAnEmptySkiplist() {
+    public void removeIntegerFromAnEmptyList() {
         // Arrange
         TestData.setupEmptySkiplist(head);
 
         // Act
-        boolean addSucceeded = this.skiplist.add(5);
+        boolean removeSucceeded = this.skiplist.rm(5);
 
         // Assert
-        assertTrue(addSucceeded);
+        assertFalse(removeSucceeded);
     }
 
-    /*
-    Verifies behavior when one integer is added to a populated skiplist
-     */
     @Test
-    public void addIntegerToAFullSkiplist() {
+    public void removeIntegerFromMiddleOfASkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
 
         // Act
-        boolean addSucceeded = this.skiplist.add(15);
+        boolean removeSucceeded = this.skiplist.rm(5);
 
         // Assert
-        assertTrue(addSucceeded);
+        assertTrue(removeSucceeded);
     }
 
-    /**
-     * Verifies behavior when one integer (that is already in the SKiplist) is added to the Skiplist
-     */
     @Test
-    public void addIntegerToASkiplistThatAlreadyHasThatInteger() {
+    public void removeIntegerFromBeginningOfASkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
 
         // Act
-        boolean addSucceeded = this.skiplist.add(5);
+        // Remove first element from test skiplist
+        boolean removeSucceeded = this.skiplist.rm(2);
 
         // Assert
-        assertFalse(addSucceeded);
+        assertTrue(removeSucceeded);
     }
 
-    /**
-     * Verifies behavior when an integer is added to the front of a Skiplist
-     */
     @Test
-    public void addIntegerToFrontOfSkiplist() {
+    public void removeIntegerFromEndOfASkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
 
         // Act
-        boolean addSucceeded = this.skiplist.add(1);
+        // Remove last element from test skiplist
+        boolean removeSucceeded = this.skiplist.rm(25);
 
         // Assert
-        assertTrue(addSucceeded);
+        assertTrue(removeSucceeded);
     }
 
-    /**
-     * Verifies behavior when one integer is added to the back of the Skiplist
-     */
     @Test
-    public void addIntegerToEndOfSkiplist() {
+    public void removeIntegerFromSkiplistWhenIntegerIsNotPresent() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
 
         // Act
-        boolean addSucceeded = this.skiplist.add(500);
+        boolean removeSucceeded = this.skiplist.rm(500);
 
         // Assert
-        assertTrue(addSucceeded);
+        assertFalse(removeSucceeded);
     }
 }

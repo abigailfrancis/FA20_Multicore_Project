@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Implementation of Skiplist, using Reentrant Locks
+ */
 public class LockBasedSkiplist implements Skiplist
 {
     private AtomicReference<Node> head = new AtomicReference<>();
-    private Random rnd = new Random();
+    private static Random rnd = new Random();
 
     public LockBasedSkiplist(Node head)
     {
@@ -22,7 +25,7 @@ public class LockBasedSkiplist implements Skiplist
     @Override
     public boolean add(Integer value)
     {
-        // Chosoe a random level (0 <= x < MAX_HEIGHT) for the new node's top level
+        // Choose a random level (0 <= x < MAX_HEIGHT) for the new node's top level
         int topLevel = chooseRandomTopLevel();
 
         // Initialize empty preds and succs lists
@@ -147,12 +150,14 @@ public class LockBasedSkiplist implements Skiplist
 
             // If the node is marked OR
             // If the node is present in the Skiplist, fully linked, not marked, and is on the right level
-            if (isMarked ||
-                    (levelFound != -1
-                            && victim != null
+            boolean shouldEvaluateNode = isMarked ||
+                    ((levelFound != -1)
+                            && (victim != null)
                             && (victim.get().isFullyLinked()
                             && victim.get().getTopLevel().equals(levelFound)
-                            && !victim.get().isMarked())))
+                            && !victim.get().isMarked()));
+
+            if (shouldEvaluateNode)
             {
                 if (!isMarked)
                 {
@@ -187,19 +192,14 @@ public class LockBasedSkiplist implements Skiplist
                         pred = preds.get(level);
                         pred.get().lock();
                         highestLocked = level;
-                        valid = !pred.get().isMarked() && pred.get().next[level] == victim;
+                        valid = !pred.get().isMarked() && pred.get().next[level].get() == victim.get();
                     }
 
                     if (!valid) continue;
 
                     // Starting at the top of the Skiplist
                     // Reassign the predecessor nodes
-                    for (int level = topLevel; level >= 0; level--)
-                    {
-                        AtomicReference<Node> newSuccessor = victim.get().next[level];
-                        Node predecessor = preds.get(level).get();
-                        predecessor.next[level] = newSuccessor;
-                    }
+                    reassignPredecessorNodes(victim, topLevel, preds);
 
                     // The victim has been removed, unlock it
                     victim.get().unlock();
@@ -281,8 +281,7 @@ public class LockBasedSkiplist implements Skiplist
 
             System.out.println();
         }
-        System.out.println("---------------------");
-        System.out.println();
+        System.out.println("---------------------\n");
     }
 
     /**
@@ -301,6 +300,21 @@ public class LockBasedSkiplist implements Skiplist
         for (int level = 0; level <= highestLocked; level++)
         {
             nodeCollection.get(level).get().unlock();
+        }
+    }
+
+    /**
+     * Reassign the predecessor nodes, to fully remove the victim
+     * @param victim The node we are trying to remove
+     * @param topLevel The highest level of the Skiplist that we need to consider
+     * @param preds The predecessor nodes
+     */
+    private void reassignPredecessorNodes(AtomicReference<Node> victim, Integer topLevel, List<AtomicReference<Node>> preds) {
+        for (int level = topLevel; level >= 0; level--)
+        {
+            AtomicReference<Node> newSuccessor = victim.get().next[level];
+            Node predecessor = preds.get(level).get();
+            predecessor.next[level] = newSuccessor;
         }
     }
 }

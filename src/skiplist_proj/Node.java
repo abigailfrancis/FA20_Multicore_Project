@@ -53,21 +53,33 @@ public class Node
         return this.item;
     }
 
+    /**
+     * @return True, if the node is marked
+     */
     public boolean isMarked()
     {
         return this.marked;
     }
 
+    /**
+     * @param value The value to set 'marked' to
+     */
     public void setMarked(boolean value)
     {
         this.marked = value;
     }
 
+    /**
+     * @return True, if the node is fully linked
+     */
     public boolean isFullyLinked()
     {
         return this.fullyLinked;
     }
 
+    /**
+     * @param value The value to set 'fullyLinked' to
+     */
     public void setFullyLinked(boolean value)
     {
         this.fullyLinked = value;
@@ -92,6 +104,9 @@ public class Node
         this.lock.unlock();
     }
 
+    /**
+     * @return The node's value, as a string
+     */
     @Override
     public String toString()
     {
