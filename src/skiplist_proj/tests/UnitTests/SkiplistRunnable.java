@@ -1,6 +1,7 @@
 package skiplist_proj.tests.UnitTests;
 
 import skiplist_proj.LockBasedSkiplist;
+import skiplist_proj.LockFree;
 import skiplist_proj.Node;
 import skiplist_proj.Skiplist;
 
@@ -19,14 +20,21 @@ public class SkiplistRunnable implements Runnable
     private Integer integerToRemove;
     private Skiplist skiplist;
 
-    public SkiplistRunnable(Node head, Integer integerToAdd, Integer integerToRemove)
+    public SkiplistRunnable(boolean lockBasedSkiplist, Node head, Integer integerToAdd, Integer integerToRemove)
     {
         this.integerToAdd = integerToAdd;
         this.integerToRemove = integerToRemove;
-        this.skiplist = new LockBasedSkiplist(head);
+
+        if(lockBasedSkiplist)
+        {
+            this.skiplist = new LockBasedSkiplist(head);
+        }
+        else {
+            this.skiplist = new LockFree();
+        }
     }
 
-    public static void runTest(Node head, int[] listOfIntegersToAdd, int[] listOfIntegersToRemove)
+    public static void runTest(boolean useLockBasedSkiplist, Node head, int[] listOfIntegersToAdd, int[] listOfIntegersToRemove)
     {
         int numAdds = listOfIntegersToAdd.length;
         int numRemoves = listOfIntegersToRemove.length;
@@ -35,11 +43,11 @@ public class SkiplistRunnable implements Runnable
         ExecutorService executorService = Executors.newFixedThreadPool(numChanges);
         List<Future> futures = new ArrayList<>();
         for (int i = 0; i < numAdds; i++) {
-            futures.add(executorService.submit(new SkiplistRunnable(head, listOfIntegersToAdd[i], null)));
+            futures.add(executorService.submit(new SkiplistRunnable(useLockBasedSkiplist, head, listOfIntegersToAdd[i], null)));
         }
 
         for (int i = 0; i < numRemoves; i++) {
-            futures.add(executorService.submit(new SkiplistRunnable(head, null, listOfIntegersToRemove[i])));
+            futures.add(executorService.submit(new SkiplistRunnable(useLockBasedSkiplist, head, null, listOfIntegersToRemove[i])));
         }
 
         executorService.shutdown();
