@@ -202,8 +202,7 @@ public class LockBasedSkiplist implements Skiplist
                     }
 
                     // The victim has been removed, unlock it
-                    // Todo, re-add this?
-                    // victim.get().unlock();
+                    victim.get().unlock();
 
                     return true;
                 }

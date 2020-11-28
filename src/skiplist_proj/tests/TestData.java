@@ -3,6 +3,7 @@ package skiplist_proj.tests;
 import skiplist_proj.Node;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
@@ -111,6 +112,29 @@ public class TestData
     }
 
     /**
+     * Populates the provided array with a list of consecutive integers
+     * @param listOfIntegers
+     */
+    public static void createListOfConsecutiveIntegers(int[] listOfIntegers) {
+        for(int i = 0; i < listOfIntegers.length; i++)
+        {
+            listOfIntegers[i] = i;
+        }
+    }
+
+    /**
+     * Populates the provided array with a list of random integers
+     * @param listOfIntegers
+     */
+    public static void createListOfRandomIntegers(int[] listOfIntegers) {
+        Random rand = new Random();
+        for(int i = 0; i < listOfIntegers.length; i++)
+        {
+            listOfIntegers[i] = rand.nextInt();
+        }
+    }
+
+    /**
      * Helper method to create a new fully-linked Node
      * @param value The value to associate with the node
      * @param height The toplevel that the node should be evaluated for
@@ -122,4 +146,5 @@ public class TestData
         n.setFullyLinked(true);
         return n;
     }
+
 }

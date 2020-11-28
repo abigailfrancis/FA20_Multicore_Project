@@ -1,10 +1,11 @@
-package skiplist_proj.tests;
+package skiplist_proj.tests.UnitTests;
 
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import skiplist_proj.*;
+import skiplist_proj.tests.TestData;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +50,9 @@ public class AddTests
         this.skiplist.display();
     }
 
+    /**
+     * Verifies behavior when one integer is added to an empty Skiplist
+     */
     @Test
     public void addIntegerToAnEmptySkiplist() {
         // Arrange
@@ -61,6 +65,9 @@ public class AddTests
         assertTrue(addSucceeded);
     }
 
+    /*
+    Verifies behavior when one integer is added to a populated skiplist
+     */
     @Test
     public void addIntegerToAFullSkiplist() {
         // Arrange
@@ -73,6 +80,9 @@ public class AddTests
         assertTrue(addSucceeded);
     }
 
+    /**
+     * Verifies behavior when one integer (that is already in the SKiplist) is added to the Skiplist
+     */
     @Test
     public void addIntegerToASkiplistThatAlreadyHasThatInteger() {
         // Arrange
@@ -83,5 +93,35 @@ public class AddTests
 
         // Assert
         assertFalse(addSucceeded);
+    }
+
+    /**
+     * Verifies behavior when an integer is added to the front of a Skiplist
+     */
+    @Test
+    public void addIntegerToFrontOfSkiplist() {
+        // Arrange
+        TestData.setupTestSkiplist1(head, preds, succs);
+
+        // Act
+        boolean addSucceeded = this.skiplist.add(1);
+
+        // Assert
+        assertTrue(addSucceeded);
+    }
+
+    /**
+     * Verifies behavior when one integer is added to the back of the Skiplist
+     */
+    @Test
+    public void addIntegerToEndOfSkiplist() {
+        // Arrange
+        TestData.setupTestSkiplist1(head, preds, succs);
+
+        // Act
+        boolean addSucceeded = this.skiplist.add(500);
+
+        // Assert
+        assertTrue(addSucceeded);
     }
 }
