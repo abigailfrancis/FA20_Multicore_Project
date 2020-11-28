@@ -150,12 +150,14 @@ public class LockBasedSkiplist implements Skiplist
 
             // If the node is marked OR
             // If the node is present in the Skiplist, fully linked, not marked, and is on the right level
-            if (isMarked ||
-                    (levelFound != -1
-                            && victim != null
+            boolean shouldEvaluateNode = isMarked ||
+                    ((levelFound != -1)
+                            && (victim != null)
                             && (victim.get().isFullyLinked()
                             && victim.get().getTopLevel().equals(levelFound)
-                            && !victim.get().isMarked())))
+                            && !victim.get().isMarked()));
+
+            if (shouldEvaluateNode)
             {
                 if (!isMarked)
                 {
@@ -197,12 +199,7 @@ public class LockBasedSkiplist implements Skiplist
 
                     // Starting at the top of the Skiplist
                     // Reassign the predecessor nodes
-                    for (int level = topLevel; level >= 0; level--)
-                    {
-                        AtomicReference<Node> newSuccessor = victim.get().next[level];
-                        Node predecessor = preds.get(level).get();
-                        predecessor.next[level] = newSuccessor;
-                    }
+                    reassignPredecessorNodes(victim, topLevel, preds);
 
                     // The victim has been removed, unlock it
                     victim.get().unlock();
@@ -284,8 +281,7 @@ public class LockBasedSkiplist implements Skiplist
 
             System.out.println();
         }
-        System.out.println("---------------------");
-        System.out.println();
+        System.out.println("---------------------\n");
     }
 
     /**
@@ -304,6 +300,21 @@ public class LockBasedSkiplist implements Skiplist
         for (int level = 0; level <= highestLocked; level++)
         {
             nodeCollection.get(level).get().unlock();
+        }
+    }
+
+    /**
+     * Reassign the predecessor nodes, to fully remove the victim
+     * @param victim The node we are trying to remove
+     * @param topLevel The highest level of the Skiplist that we need to consider
+     * @param preds The predecessor nodes
+     */
+    private void reassignPredecessorNodes(AtomicReference<Node> victim, Integer topLevel, List<AtomicReference<Node>> preds) {
+        for (int level = topLevel; level >= 0; level--)
+        {
+            AtomicReference<Node> newSuccessor = victim.get().next[level];
+            Node predecessor = preds.get(level).get();
+            predecessor.next[level] = newSuccessor;
         }
     }
 }
