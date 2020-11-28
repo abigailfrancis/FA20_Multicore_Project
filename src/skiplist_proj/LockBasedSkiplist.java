@@ -22,7 +22,7 @@ public class LockBasedSkiplist implements Skiplist
     @Override
     public boolean add(Integer value)
     {
-        // Chosoe a random level (0 <= x < MAX_HEIGHT) for the new node's top level
+        // Choose a random level (0 <= x < MAX_HEIGHT) for the new node's top level
         int topLevel = chooseRandomTopLevel();
 
         // Initialize empty preds and succs lists
@@ -187,7 +187,7 @@ public class LockBasedSkiplist implements Skiplist
                         pred = preds.get(level);
                         pred.get().lock();
                         highestLocked = level;
-                        valid = !pred.get().isMarked() && pred.get().next[level] == victim;
+                        valid = !pred.get().isMarked() && pred.get().next[level].get() == victim.get();
                     }
 
                     if (!valid) continue;

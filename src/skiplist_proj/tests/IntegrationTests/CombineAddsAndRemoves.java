@@ -51,7 +51,7 @@ public class CombineAddsAndRemoves
     }
 
     /**
-     * Verifies behavior when an integer is added and then removed from the Skiplist
+     * Verifies behavior when an integer is added and then removed from a pre-populated Skiplist
      */
     @Test
     public void addIntegerThenRemoveSameInteger() {
@@ -68,7 +68,7 @@ public class CombineAddsAndRemoves
     }
 
     /**
-     * Verifies behavior when an integer is removed from and then added to the Skiplist
+     * Verifies behavior when an integer is removed from and then added to a pre-populated Skiplist
      */
     @Test
     public void removeIntegerAndReAddInteger() {
@@ -85,7 +85,7 @@ public class CombineAddsAndRemoves
     }
 
     /**
-     * Verifies behavior when multiple integers are added to & removed from the Skiplist
+     * Verifies behavior when multiple integers are added to & removed from a pre-populated Skiplist
      */
     @Test
     public void addAndRemoveMultipleIntegers() {

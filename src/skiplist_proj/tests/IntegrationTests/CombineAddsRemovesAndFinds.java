@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
@@ -70,7 +69,7 @@ public class CombineAddsRemovesAndFinds
     }
 
     /**
-     * Verifies behavior when an integer is removed from and then we try to find it
+     * Verifies behavior when an integer is removed from the list and then we try to find it
      */
     @Test
     public void removeIntegerThenFindInteger() {
