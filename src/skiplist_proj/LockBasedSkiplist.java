@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Implementation of Skiplist, using Reentrant Locks
+ */
 public class LockBasedSkiplist implements Skiplist
 {
     private AtomicReference<Node> head = new AtomicReference<>();
-    private Random rnd = new Random();
+    private static Random rnd = new Random();
 
     public LockBasedSkiplist(Node head)
     {

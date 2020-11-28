@@ -1,4 +1,4 @@
-package skiplist_proj.tests.IntegrationTests;
+package skiplist_proj.tests.integration_tests;
 
 import org.junit.After;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import skiplist_proj.*;
 import skiplist_proj.tests.TestData;
-import skiplist_proj.tests.UnitTests.SkiplistRunnable;
+import skiplist_proj.tests.unit_tests.SkiplistRunnable;
 
 import java.util.ArrayList;
 import java.util.Collection;

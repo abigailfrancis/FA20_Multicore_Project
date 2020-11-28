@@ -1,4 +1,4 @@
-package skiplist_proj.tests.UnitTests;
+package skiplist_proj.tests.unit_tests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

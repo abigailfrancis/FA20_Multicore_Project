@@ -1,4 +1,4 @@
-package skiplist_proj.tests.UnitTests;
+package skiplist_proj.tests.unit_tests;
 
 import skiplist_proj.LockBasedSkiplist;
 import skiplist_proj.LockFree;
