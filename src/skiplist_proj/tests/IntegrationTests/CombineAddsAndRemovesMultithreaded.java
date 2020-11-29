@@ -1,6 +1,6 @@
 package skiplist_proj.tests.IntegrationTests;
 
-import jdk.jshell.spi.ExecutionControl;
+//import jdk.jshell.spi.ExecutionControl;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +40,7 @@ public class CombineAddsAndRemovesMultithreaded
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -54,8 +54,8 @@ public class CombineAddsAndRemovesMultithreaded
     /**
      * Verifies behavior when many integers are added and then removed from the Skiplist
      */
-    @Test
-    public void addAndRemoveLargeTest() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("");
-    }
+   // @Test
+   // public void addAndRemoveLargeTest() throws ExecutionControl.NotImplementedException {
+     //   throw new ExecutionControl.NotImplementedException("");
+   // }
 }

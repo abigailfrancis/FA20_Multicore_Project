@@ -1,7 +1,7 @@
 package skiplist_proj.tests.UnitTests;
 
 import skiplist_proj.LockBasedSkiplist;
-import skiplist_proj.LockFree;
+import skiplist_proj.LockFreeSkiplist;
 import skiplist_proj.Node;
 import skiplist_proj.Skiplist;
 
@@ -30,7 +30,7 @@ public class SkiplistRunnable implements Runnable
             this.skiplist = new LockBasedSkiplist(head);
         }
         else {
-            this.skiplist = new LockFree();
+            this.skiplist = new LockFreeSkiplist(head);
         }
     }
 

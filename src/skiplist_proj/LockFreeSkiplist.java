@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class LockFreeSkiplist implements Skiplist
 {
-	static final int MAX_LEVEL = 10;
+	//static final int MAX_LEVEL = 10;
 	
     final AtomicReference<Node> head = new AtomicReference<>();
     final AtomicReference<Node> tail = new AtomicReference<>();
@@ -30,7 +30,11 @@ public class LockFreeSkiplist implements Skiplist
      // Initialize empty preds and succs lists
         List<AtomicReference<Node>> preds = new ArrayList<>();
         List<AtomicReference<Node>> succs = new ArrayList<>();
-        
+        for (int i = 0; i < MAX_HEIGHT; i++)
+        {
+            preds.add(i, null);
+            succs.add(i, null);
+        }
         while(true) {
         	boolean found = findLF(value, preds, succs);
         	if(found) {
@@ -66,7 +70,7 @@ public class LockFreeSkiplist implements Skiplist
     }
     private Integer getRandomLevel() {
     	Random random = new Random();
-    	return random.nextInt(MAX_LEVEL);
+    	return random.nextInt(MAX_HEIGHT);
     }
     /**
      * @param value the value to be removed from the Skiplist
@@ -81,6 +85,11 @@ public class LockFreeSkiplist implements Skiplist
         List<AtomicReference<Node>> succs = new ArrayList<>();
         Node succ;
         Node succ_new;
+        for (int i = 0; i < MAX_HEIGHT; i++)
+        {
+            preds.add(i, null);
+            succs.add(i, null);
+        }
         while(true) {
         	boolean found = findLF(value, preds, succs);
         	if(!found) {
@@ -127,35 +136,35 @@ public class LockFreeSkiplist implements Skiplist
     private boolean findLF(Integer value, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs)
     {
     	int bottomLevel = 0;
-    	int key = value.hashCode();
+    	int key = value;
     	boolean [] marked = {false};
     	boolean snip;
 		AtomicReference<Node> pred = null, succ = null, curr = null;
     	retry:
     		while(true) {
     			pred = head;
-    			for(int level = MAX_LEVEL; level >= bottomLevel; level--) {
+    			for(int level = pred.get().getTopLevel(); level >= bottomLevel; level--) {
     				curr = pred.get().next[level];
     				while(true) {
     					succ = curr.get().next[level];
-    					marked[0] = succ.get().isMarked();
+    					if (succ.get() != null) marked[0] = succ.get().isMarked();
     					while(marked[0]) {
     						snip = pred.get().next[level].compareAndSet(curr.get(), succ.get());
     						if(!snip) continue retry;
     						curr = pred.get().next[level];
     						succ = curr.get().next[level];
-    						marked[0] = succ.get().isMarked();
+    						if(succ.get() != null) marked[0] = succ.get().isMarked();
     					}
-    					if(curr.get().getItem().hashCode() < key) {
+    					if(curr.get().getItem()< key) {
     						pred = curr; curr = succ;
     					}else {
     						break;
     					}
     				}
-    				preds.set(level, pred);
-    				succs.set(level, curr);
+    				preds.add(level, pred);
+    				succs.add(level, succ);
     			}
-    			return(curr.get().getItem().hashCode() == key);
+    			return(curr.get().getItem() == key);
     		}
 	}
     @Override
@@ -168,7 +177,7 @@ public class LockFreeSkiplist implements Skiplist
     public void display()
     {
         System.out.println("---------------------");
-        for (int level = MAX_LEVEL -1; level >= 0; level--)
+        for (int level = MAX_HEIGHT -1; level >= 0; level--)
         {
             System.out.print("Level " + level + ": ");
 

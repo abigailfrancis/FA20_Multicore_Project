@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+//import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+//import static junit.framework.Assert.assertFalse;
+//import static junit.framework.Assert.assertTrue;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -24,7 +26,7 @@ public class AddTests
     private static List<AtomicReference<Node>> preds = new ArrayList<>();
     private static List<AtomicReference<Node>> succs = new ArrayList<>();
     private static Node head;
-
+   
     public AddTests(Skiplist skiplist)
     {
         this.skiplist = skiplist;
@@ -38,8 +40,8 @@ public class AddTests
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
 
         // Run with both types of Skiplist
-        testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
+        //testParams.add(new LockBasedSkiplist(head));
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }

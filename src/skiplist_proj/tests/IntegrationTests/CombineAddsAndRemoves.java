@@ -39,7 +39,7 @@ public class CombineAddsAndRemoves
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
