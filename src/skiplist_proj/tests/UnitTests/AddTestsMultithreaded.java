@@ -10,10 +10,9 @@ import skiplist_proj.tests.TestData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import java.util.concurrent.atomic.AtomicMarkableReference;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -21,8 +20,8 @@ public class AddTestsMultithreaded
 {
     private Skiplist skiplist;
 
-    private static List<AtomicReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicReference<Node>> succs = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
     public AddTestsMultithreaded(Skiplist skiplist)
@@ -39,7 +38,7 @@ public class AddTestsMultithreaded
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFreeSkiplist(head));
+        //testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -66,13 +65,13 @@ public class AddTestsMultithreaded
 
         // Assert
         // Verify that the bottom level has 1 -> 3 -> 5
-        Node node1 = this.head.next[0].get();
-        assertTrue(this.head.next[0].get().getItem() == 1);
+        Node node1 = this.head.next[0].getReference();
+        assertTrue(this.head.next[0].getReference().getItem() == 1);
 
-        Node node2 = node1.next[0].get();
+        Node node2 = node1.next[0].getReference();
         assertTrue(node2.getItem() == 3);
 
-        Node node3 = node2.next[0].get();
+        Node node3 = node2.next[0].getReference();
         assertTrue(node3.getItem() == 5);
     }
 
@@ -92,7 +91,7 @@ public class AddTestsMultithreaded
 
         // Assert
         // Go through the bottom level of the skiplist and look for all 3 of the added integers
-        Node next = this.head.next[0].get();
+        Node next = this.head.next[0].getReference();
         int indexOfAddedItem = 0;
         int skipListLength = 0;
 
@@ -102,7 +101,7 @@ public class AddTestsMultithreaded
             {
                 indexOfAddedItem++;
             }
-            next = next.next[0].get();
+            next = next.next[0].getReference();
             skipListLength++;
         }
         assertTrue(indexOfAddedItem == 3);
@@ -128,7 +127,7 @@ public class AddTestsMultithreaded
 
         // Assert
         // Go through the bottom level of the skiplist and look for all 3 of the added integers
-        Node next = this.head.next[0].get();
+        Node next = this.head.next[0].getReference();
         int indexOfAddedItem = 0;
         int skipListLength = 0;
 
@@ -138,7 +137,7 @@ public class AddTestsMultithreaded
             {
                 indexOfAddedItem++;
             }
-            next = next.next[0].get();
+            next = next.next[0].getReference();
             skipListLength++;
         }
 

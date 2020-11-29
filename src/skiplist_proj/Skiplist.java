@@ -1,7 +1,7 @@
 package skiplist_proj;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
 /**
  * Interface for the Skiplist implementations
@@ -10,7 +10,7 @@ public interface Skiplist {
     /**
      * The maximum height that we will allow the Skiplist to be
      */
-    Integer MAX_HEIGHT = 4;
+    Integer MAX_HEIGHT = 3;
 
     /**
      * Adds a new element to the Skiplist
@@ -33,7 +33,7 @@ public interface Skiplist {
      * @param succs the list of successors for the node we are searching for
      * @return The level where the value was found, otherwise -1
      */
-    Integer find(Integer value, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs);
+    Integer find(Integer value, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs);
 
     /**
      * Display the Skiplist

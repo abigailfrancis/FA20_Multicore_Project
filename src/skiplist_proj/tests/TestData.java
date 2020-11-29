@@ -34,7 +34,7 @@ public class TestData
         //   1        head -> tail
         //   0        head -> tail
 
-        for (int i = 0; i < MAX_HEIGHT; i++)
+        for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             // Set all of head's 'next' values to the tail
             head.next[i] = tail;
@@ -104,7 +104,7 @@ public class TestData
         node25.getReference().next[0] = tail;
 
         // Initialize empty values for preds & succs
-        for (int i = 0; i < MAX_HEIGHT; i++)
+        for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             preds.add(i, null);
             succs.add(i, null);

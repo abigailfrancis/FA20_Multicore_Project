@@ -10,10 +10,10 @@ import skiplist_proj.tests.TestData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -21,8 +21,8 @@ public class RemoveTestsMultithreaded
 {
     private Skiplist skiplist;
 
-    private static List<AtomicReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicReference<Node>> succs = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
     public RemoveTestsMultithreaded(Skiplist skiplist)
@@ -39,7 +39,7 @@ public class RemoveTestsMultithreaded
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFreeSkiplist(head));
+        //testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -65,7 +65,7 @@ public class RemoveTestsMultithreaded
         SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
 
         // Assert
-        Node node1 = this.head.next[0].get();
+        Node node1 = this.head.next[0].getReference();
         assertTrue(node1.getItem() == Integer.MAX_VALUE);
     }
 
@@ -86,7 +86,7 @@ public class RemoveTestsMultithreaded
         // Assert
         for (int i = 0; i < MAX_HEIGHT; i++)
         {
-            Node node1 = this.head.next[i].get();
+            Node node1 = this.head.next[i].getReference();
             assertTrue(node1.getItem() == Integer.MAX_VALUE);
         }
     }
