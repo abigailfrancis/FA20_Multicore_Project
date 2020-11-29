@@ -1,6 +1,6 @@
 package skiplist_proj;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -10,7 +10,7 @@ public class Node
     private Integer item;
     private Integer topLevel;
     public long key;
-    public AtomicReference<Node>[] next;
+    public AtomicMarkableReference<Node>[] next;
     // Used for Lock-Based implementation
     private Lock lock = new ReentrantLock();
     private volatile boolean marked = false;
@@ -25,10 +25,10 @@ public class Node
     {
         item = value;
         key = (long)value.hashCode(); 
-        next = new AtomicReference[height];
+        next = new AtomicMarkableReference[height];
         for (int i = 0; i < height; i++)
         {
-            next[i] = new AtomicReference<>();
+            next[i] = new AtomicMarkableReference<>(null, false);
         }
 
         // Levels are zero-indexed. Subtract one from height.

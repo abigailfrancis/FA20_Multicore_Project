@@ -4,7 +4,7 @@ import skiplist_proj.Node;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
@@ -24,8 +24,8 @@ public class TestData
      */
     public static void setupEmptySkiplist(Node head)
     {
-        AtomicReference<Node> tail = new AtomicReference<>();
-        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT));
+        AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
+        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
 
         // Test Skiplist
         // Level
@@ -47,7 +47,7 @@ public class TestData
      * @param preds The collection of predecessor nodes
      * @param succs The collection of successor nodes
      */
-    public static void setupTestSkiplist1(Node head, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs)
+    public static void setupTestSkiplist1(Node head, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs)
     {
         // Test Skiplist
         // Level
@@ -56,52 +56,52 @@ public class TestData
         //   1        head ->      5 ->      9 ->       18 ->       end
         //   0        head -> 2 -> 5 -> 8 -> 9 -> 11 -> 18 -> 25 -> end
 
-        AtomicReference<Node> node2 = new AtomicReference<>();
-        node2.set(createNewFullyLinkedNode(2, 1));
+        AtomicMarkableReference<Node> node2 = new AtomicMarkableReference<>(null, false);
+        node2.set(createNewFullyLinkedNode(2, 1), false);
 
-        AtomicReference<Node> node5 = new AtomicReference<>();
-        node5.set(createNewFullyLinkedNode(5, 2));
+        AtomicMarkableReference<Node> node5 = new AtomicMarkableReference<>(null, false);
+        node5.set(createNewFullyLinkedNode(5, 2), false);
 
-        AtomicReference<Node> node8 = new AtomicReference<>();
-        node8.set(createNewFullyLinkedNode(8, 1));
+        AtomicMarkableReference<Node> node8 = new AtomicMarkableReference<>(null, false);
+        node8.set(createNewFullyLinkedNode(8, 1), false);
 
-        AtomicReference<Node> node9 = new AtomicReference<>();
-        node9.set(createNewFullyLinkedNode(9, 3));
+        AtomicMarkableReference<Node> node9 = new AtomicMarkableReference<>(null, false);
+        node9.set(createNewFullyLinkedNode(9, 3), false);
 
-        AtomicReference<Node> node11 = new AtomicReference<>();
-        node11.set(createNewFullyLinkedNode(11, 1));
+        AtomicMarkableReference<Node> node11 = new AtomicMarkableReference<>(null, false);
+        node11.set(createNewFullyLinkedNode(11, 1), false);
 
-        AtomicReference<Node> node18 = new AtomicReference<>();
-        node18.set(createNewFullyLinkedNode(18, 2));
+        AtomicMarkableReference<Node> node18 = new AtomicMarkableReference<>(null, false);
+        node18.set(createNewFullyLinkedNode(18, 2), false);
 
-        AtomicReference<Node> node25 = new AtomicReference<>();
-        node25.set(createNewFullyLinkedNode(25, 1));
+        AtomicMarkableReference<Node> node25 = new AtomicMarkableReference<>(null, false);
+        node25.set(createNewFullyLinkedNode(25, 1), false);
 
-        AtomicReference<Node> tail = new AtomicReference<>();
-        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT));
+        AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
+        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT), false);
 
         head.next[0] = node2;
         head.next[1] = node5;
         head.next[2] = node9;
         head.next[3] = tail;
 
-        node2.get().next[0] = node5;
+        node2.getReference().next[0] = node5;
 
-        node5.get().next[0] = node8;
-        node5.get().next[1] = node9;
+        node5.getReference().next[0] = node8;
+        node5.getReference().next[1] = node9;
 
-        node8.get().next[0] = node9;
+        node8.getReference().next[0] = node9;
 
-        node9.get().next[0] = node11;
-        node9.get().next[1] = node18;
-        node9.get().next[2] = tail;
+        node9.getReference().next[0] = node11;
+        node9.getReference().next[1] = node18;
+        node9.getReference().next[2] = tail;
 
-        node11.get().next[0] = node18;
+        node11.getReference().next[0] = node18;
 
-        node18.get().next[0] = node25;
-        node18.get().next[1] = tail;
+        node18.getReference().next[0] = node25;
+        node18.getReference().next[1] = tail;
 
-        node25.get().next[0] = tail;
+        node25.getReference().next[0] = tail;
 
         // Initialize empty values for preds & succs
         for (int i = 0; i < MAX_HEIGHT; i++)
