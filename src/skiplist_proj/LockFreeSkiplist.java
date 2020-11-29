@@ -16,6 +16,7 @@ public class LockFreeSkiplist implements Skiplist
     public LockFreeSkiplist(Node head)
     {
         this.head.set(head);
+        this.tail.set(head);
     }
 
     /**
@@ -40,12 +41,12 @@ public class LockFreeSkiplist implements Skiplist
         	if(found) {
         		return false;
         	}else {
-        		Node newNode = new Node(value, topLevel);
+        		Node newNode = new Node(value, topLevel+1);
         		newNode.setMarked(false);
         		for(int level = bottomLevel; level<= topLevel; level++) {
         			Node succ = succs.get(level).get();
         			newNode.next[level].set(succ);
-        			newNode.next[level].get().setMarked(false); //not totally sure this is right
+        			//newNode.next[level].get().setMarked(false); //not totally sure this is right
         		}
         		Node pred = preds.get(bottomLevel).get();
         		Node succ = succs.get(bottomLevel).get();
@@ -91,7 +92,8 @@ public class LockFreeSkiplist implements Skiplist
             succs.add(i, null);
         }
         while(true) {
-        	boolean found = findLF(value, preds, succs);
+        	boolean found = contains(value);
+        	found = findLF(value, preds, succs);
         	if(!found) {
         		return false;
         	}else {
@@ -136,35 +138,41 @@ public class LockFreeSkiplist implements Skiplist
     private boolean findLF(Integer value, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs)
     {
     	int bottomLevel = 0;
-    	int key = value;
+    	long key = value.hashCode();
     	boolean [] marked = {false};
     	boolean snip;
+		Node succ_temp = null, curr_temp = null;
 		AtomicReference<Node> pred = null, succ = null, curr = null;
     	retry:
     		while(true) {
     			pred = head;
     			for(int level = pred.get().getTopLevel(); level >= bottomLevel; level--) {
-    				curr = pred.get().next[level];
+    				curr_temp = pred.get().next[level].get();
+    				curr = pred.get().next[level]; 
     				while(true) {
-    					succ = curr.get().next[level];
-    					if (succ.get() != null) marked[0] = succ.get().isMarked();
+    					succ_temp = curr_temp.next[level].get();
+    					succ = curr_temp.next[level];
+    					if (succ_temp != null) marked[0] = succ_temp.isMarked();
     					while(marked[0]) {
-    						snip = pred.get().next[level].compareAndSet(curr.get(), succ.get());
+    						snip = pred.get().next[level].compareAndSet(curr_temp, succ_temp);
     						if(!snip) continue retry;
+    						curr_temp = pred.get().next[level].get();
     						curr = pred.get().next[level];
-    						succ = curr.get().next[level];
-    						if(succ.get() != null) marked[0] = succ.get().isMarked();
+    						succ_temp = curr_temp.next[level].get();
+    						succ = curr_temp.next[level];
+    						if(succ_temp != null) marked[0] = succ_temp.isMarked();
     					}
-    					if(curr.get().getItem()< key) {
+    					if(curr_temp.key< key) {
     						pred = curr; curr = succ;
+    						curr_temp = succ_temp;
     					}else {
     						break;
     					}
     				}
-    				preds.add(level, pred);
-    				succs.add(level, succ);
+    				preds.set(level, pred);
+    				succs.set(level, succ);
     			}
-    			return(curr.get().getItem() == key);
+    			return(curr_temp.key == key);
     		}
 	}
     @Override
@@ -172,7 +180,32 @@ public class LockFreeSkiplist implements Skiplist
     {
     	return 0;
 	}
-
+    
+    public boolean contains(Integer value) {
+    	int bottomLevel = 0;
+    	int v = value.hashCode();
+    	boolean [] marked = {false};
+    	AtomicReference<Node> pred = head, succ = null, curr = null;
+    	for(int level = pred.get().getTopLevel(); level >= bottomLevel; level--) {
+    		curr = pred.get().next[level];
+    		while(true) {
+    			succ = curr.get().next[level];
+    			marked[0] = succ.get().isMarked();
+    			while(marked[0]) {
+    				curr = pred.get().next[level];
+    				succ = curr.get().next[level];    				
+    			}
+    			if(curr.get().key < v) {
+    				pred = curr;
+    				curr = succ;
+    			}else {
+    				break;
+    			}
+    		}
+    	}
+    	return (curr.get().key == v);
+    }
+    
 	@Override
     public void display()
     {
@@ -193,17 +226,5 @@ public class LockFreeSkiplist implements Skiplist
         }
         System.out.println("---------------------");
         System.out.println();
-    }
-
-    /**
-     * Unlock the nodes in the collection between level 0 & highestLocked
-     * @param nodeCollection The collection of nodes to be unlocked
-     * @param highestLocked The highest level where the node is present
-     */
-    private void unlockAtAllLevels(List<AtomicReference<Node>> nodeCollection, int highestLocked) {
-        for (int level = 0; level <= highestLocked; level++)
-        {
-            nodeCollection.get(level).get().unlock();
-        }
     }
 }

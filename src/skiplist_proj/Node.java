@@ -9,13 +9,13 @@ public class Node
     // Used for both implementations
     private Integer item;
     private Integer topLevel;
+    public long key;
     public AtomicReference<Node>[] next;
-
     // Used for Lock-Based implementation
     private Lock lock = new ReentrantLock();
     private volatile boolean marked = false;
     private volatile boolean fullyLinked = false;
-
+    
     /**
      * Initializes a new LockBasedNode
      * @param value The value to associate with the LockBasedNode
@@ -24,7 +24,7 @@ public class Node
     public Node(Integer value, int height)
     {
         item = value;
-
+        key = (long)value.hashCode(); 
         next = new AtomicReference[height];
         for (int i = 0; i < height; i++)
         {
@@ -36,7 +36,13 @@ public class Node
     }
 
     /*** Public Accessor Methods ***/
-
+    /**
+     * @return The value of key
+     */
+    public long getKey()
+    {
+        return key;
+    }
     /**
      * @return The value of topLevel
      */

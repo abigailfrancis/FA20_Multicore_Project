@@ -59,7 +59,7 @@ public class AddTests
     public void addIntegerToAnEmptySkiplist() {
         // Arrange
         TestData.setupEmptySkiplist(head);
-
+        this.skiplist.display();
         // Act
         boolean addSucceeded = this.skiplist.add(5);
 
