@@ -84,7 +84,7 @@ public class RemoveTestsMultithreaded
         SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
 
         // Assert
-        for (int i = 0; i < MAX_HEIGHT; i++)
+        for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             Node node1 = this.head.next[i].getReference();
             assertTrue(node1.getItem() == Integer.MAX_VALUE);
