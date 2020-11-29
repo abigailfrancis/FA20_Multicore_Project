@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
-
+import java.util.concurrent.atomic.AtomicMarkableReference;
 public class LockFreeSkiplist implements Skiplist
 {
 	//static final int MAX_LEVEL = 10;
@@ -49,16 +49,16 @@ public class LockFreeSkiplist implements Skiplist
         			newNode.next[level].set(succ);
         			//newNode.next[level].get().setMarked(false); //not totally sure this is right
         		}
-        		Node pred = preds.get(bottomLevel).get();
+        		AtomicReference<Node> pred = preds.get(bottomLevel);
         		Node succ = succs.get(bottomLevel).get();
-        		if(!pred.next[bottomLevel].compareAndSet(succ, newNode)) {
+        		if(!pred.get().next[bottomLevel].compareAndSet(succ, newNode)) {
         				continue;
         		}
         		for(int level = bottomLevel+1; level<= topLevel; level++) {
         			while(true) {
-        				pred = preds.get(level).get();
+        				pred = preds.get(level);
         				succ = succs.get(level).get();
-        				if(pred.next[level].compareAndSet(succ, newNode)) {
+        				if(pred.get().next[level].compareAndSet(succ, newNode)) {
         					break;
         					//findLF(value, preds, succs);
         				}
@@ -87,14 +87,17 @@ public class LockFreeSkiplist implements Skiplist
         List<AtomicReference<Node>> succs = new ArrayList<>();
         Node succ;
         Node succ_new;
-        for (int i = 0; i < MAX_HEIGHT; i++)
-        {
-            preds.add(i, null);
-            succs.add(i, null);
-        }
+
         while(true) {
-        	boolean found = contains(value);
-        	found = findLF(value, preds, succs);
+        	
+        	boolean found = findLF(value, preds, succs);
+            preds.clear();
+            succs.clear();
+            for (int i = 0; i < succs.get(bottomLevel).get().getTopLevel(); i++)
+            {
+                preds.add(i, null);
+                succs.add(i, null);
+            }
         	if(!found) {
         		return false;
         	}else {

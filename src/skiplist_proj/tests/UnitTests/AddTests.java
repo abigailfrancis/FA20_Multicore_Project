@@ -59,7 +59,7 @@ public class AddTests
     public void addIntegerToAnEmptySkiplist() {
         // Arrange
         TestData.setupEmptySkiplist(head);
-        this.skiplist.display();
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(5);
 
@@ -89,7 +89,7 @@ public class AddTests
     public void addIntegerToASkiplistThatAlreadyHasThatInteger() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(5);
 
