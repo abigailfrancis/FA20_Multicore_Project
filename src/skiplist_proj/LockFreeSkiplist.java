@@ -31,7 +31,8 @@ public class LockFreeSkiplist implements Skiplist
      // Initialize empty preds and succs lists
         List<AtomicReference<Node>> preds = new ArrayList<>();
         List<AtomicReference<Node>> succs = new ArrayList<>();
-        for (int i = 0; i < MAX_HEIGHT; i++)
+        //for (int i = 0; i < MAX_HEIGHT; i++)
+        for (int i = 0; i <= topLevel; i++)
         {
             preds.add(i, null);
             succs.add(i, null);
