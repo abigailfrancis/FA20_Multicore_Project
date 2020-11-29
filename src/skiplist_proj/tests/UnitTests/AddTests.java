@@ -62,7 +62,7 @@ public class AddTests
         printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(5);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }
@@ -74,10 +74,10 @@ public class AddTests
     public void addIntegerToAFullSkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(15);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }
@@ -92,7 +92,7 @@ public class AddTests
         printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(5);
-
+        printSkiplist();
         // Assert
         assertFalse(addSucceeded);
     }
@@ -104,10 +104,10 @@ public class AddTests
     public void addIntegerToFrontOfSkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(1);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }
@@ -119,10 +119,10 @@ public class AddTests
     public void addIntegerToEndOfSkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(500);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }

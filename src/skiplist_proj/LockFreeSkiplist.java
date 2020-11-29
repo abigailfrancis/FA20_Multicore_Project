@@ -31,10 +31,11 @@ public class LockFreeSkiplist implements Skiplist
         int topLevel = getRandomLevel();
         int bottomLevel = 0;
      // Initialize empty preds and succs lists
+       // Node initNode = new Node(null, topLevel + 1);
         List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
         List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
         //for (int i = 0; i < MAX_HEIGHT; i++)
-        for (int i = 0; i <= topLevel; i++)
+        for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             preds.add(i, null);
             succs.add(i, null);
@@ -44,7 +45,7 @@ public class LockFreeSkiplist implements Skiplist
         	if(found) {
         		return false;
         	}else {
-        		Node newNode = new Node(value, topLevel+1);
+        		Node newNode = new Node(value, topLevel);
         		newNode.setMarked(false);
         		for(int level = bottomLevel; level<= topLevel; level++) {
         			Node succ = succs.get(level).getReference();
@@ -141,11 +142,11 @@ public class LockFreeSkiplist implements Skiplist
     	retry:
     		while(true) {
     			pred = head;
-    			for(int level = pred.getReference().getTopLevel(); level >= bottomLevel; level--) {
+    			for(int level = MAX_HEIGHT-1; level >= bottomLevel; level--) {
     				curr_temp = pred.getReference().next[level].getReference();
     				curr = pred.getReference().next[level]; 
     				while(true) {
-    					succ_temp = curr_temp.next[level].get(marked);
+    					succ_temp = curr.getReference().next[level].get(marked);
     					succ = curr_temp.next[level];
     					while(marked[0]) {
     						snip = pred.getReference().next[level].compareAndSet(curr_temp, succ_temp, false, false);

@@ -25,14 +25,14 @@ public class Node
     {
         item = value;
         key = (long)value.hashCode(); 
-        next = new AtomicMarkableReference[height];
-        for (int i = 0; i < height; i++)
+        next = new AtomicMarkableReference[height + 1];
+        for (int i = 0; i < next.length; i++)
         {
             next[i] = new AtomicMarkableReference<>(null, false);
         }
 
         // Levels are zero-indexed. Subtract one from height.
-        topLevel = height-1;
+        topLevel = height;
     }
 
     /*** Public Accessor Methods ***/
