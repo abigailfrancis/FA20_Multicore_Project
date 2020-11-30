@@ -147,12 +147,13 @@ public class LockBasedSkiplist implements Skiplist
 
             // If the node is marked OR
             // If the node is present in the Skiplist, fully linked, not marked, and is on the right level
-            if (isMarked ||
-                    (levelFound != -1
-                            && victim != null
+            boolean shouldEvaluateNode = isMarked ||
+                    ((levelFound != -1)
+                            &&( victim != null)
                             && (victim.getReference().isFullyLinked()
                             && victim.getReference().getTopLevel().equals(levelFound)
-                            && !victim.getReference().isMarked())))
+                            && !victim.getReference().isMarked()));
+			if(shouldEvaluateNode)
             {
                 if (!isMarked)
                 {
@@ -194,12 +195,7 @@ public class LockBasedSkiplist implements Skiplist
 
                     // Starting at the top of the Skiplist
                     // Reassign the predecessor nodes
-                    for (int level = topLevel; level >= 0; level--)
-                    {
-                    	AtomicMarkableReference<Node> newSuccessor = victim.getReference().next[level];
-                        Node predecessor = preds.get(level).getReference();
-                        predecessor.next[level] = newSuccessor;
-                    }
+                    reassignPredecessorNodes(victim, topLevel, preds);
 
                     // The victim has been removed, unlock it
                     victim.getReference().unlock();
@@ -301,6 +297,21 @@ public class LockBasedSkiplist implements Skiplist
         for (int level = 0; level <= highestLocked; level++)
         {
             nodeCollection.get(level).getReference().unlock();
+        }
+    }
+
+    /**
+     * Reassign the predecessor nodes, to fully remove the victim
+     * @param victim The node we are trying to remove
+     * @param topLevel The highest level of the Skiplist that we need to consider
+     * @param preds The predecessor nodes
+     */
+    private void reassignPredecessorNodes(AtomicMarkableReference<Node> victim, Integer topLevel, List<AtomicMarkableReference<Node>> preds) {
+        for (int level = topLevel; level >= 0; level--)
+        {
+            AtomicMarkableReference<Node> newSuccessor = victim.getReference().next[level];
+            Node predecessor = preds.get(level).getReference();
+            predecessor.next[level] = newSuccessor;
         }
     }
 }

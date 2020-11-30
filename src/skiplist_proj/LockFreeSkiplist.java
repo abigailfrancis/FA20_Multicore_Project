@@ -30,7 +30,7 @@ public class LockFreeSkiplist implements Skiplist
     public boolean add(Integer value)
     {
         int topLevel = getRandomLevel();
-        topLevel = 3;
+        //topLevel = 3;
         int bottomLevel = 0;
      // Initialize empty preds and succs lists
        // Node initNode = new Node(null, topLevel + 1);
@@ -44,8 +44,8 @@ public class LockFreeSkiplist implements Skiplist
         }
         System.out.println("ADD Random Level: " + topLevel);
         while(true) {
-        	boolean found = findLF(value, preds, succs);
-        	if(found) {
+        	int found = find(value, preds, succs);
+        	if(found != -1) {
         		return false;
         	}else {
         		Node newNode = new Node(value, topLevel);
@@ -67,7 +67,7 @@ public class LockFreeSkiplist implements Skiplist
         				if(pred.getReference().next[level].compareAndSet(succ, newNode, false, false))
         					break;
         				this.display();
-        				findLF(value, preds, succs);	
+        				find(value, preds, succs);	
         			}
         		}
         		return true;
@@ -94,7 +94,7 @@ public class LockFreeSkiplist implements Skiplist
 
         while(true) {
         	
-        	boolean found = findLF(value, preds, succs);
+        	int found = find(value, preds, succs);
             preds.clear();
             succs.clear();
             for (int i = 0; i < succs.get(bottomLevel).getReference().getTopLevel(); i++)
@@ -102,7 +102,7 @@ public class LockFreeSkiplist implements Skiplist
                 preds.add(i, null);
                 succs.add(i, null);
             }
-        	if(!found) {
+        	if(!(found != -1)) {
         		return false;
         	}else {
         		Node nodeToRemove = succs.get(bottomLevel).getReference();
@@ -121,7 +121,7 @@ public class LockFreeSkiplist implements Skiplist
     				boolean iMarkedIt = nodeToRemove.next[bottomLevel].compareAndSet(succ, succ, false, true);
     				succ = nodeToRemove.next[bottomLevel].get(marked);
         			if(iMarkedIt) {
-        				findLF(value, preds, succs);
+        				find(value, preds, succs);
         				return true;
         			}
         			else if(marked[0]) return false;
@@ -131,9 +131,11 @@ public class LockFreeSkiplist implements Skiplist
 
     
     }
-
-    private boolean findLF(Integer value, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs)
+    @Override
+    public Integer find(Integer value, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs)
     {
+     	boolean lfound = true;
+    	int lfound_ret = -1;
     	int bottomLevel = 0;
     	long key = value.hashCode();
     	boolean [] marked = {false};
@@ -163,13 +165,18 @@ public class LockFreeSkiplist implements Skiplist
     						pred = curr; curr = succ;
     						pred_save = curr_save; curr_save = succ_save;
     					}else {
+    						if(curr.key == key && lfound) {
+    							lfound = false;
+    							lfound_ret = level;
+    						}
     						break;
     					}
     				}
     				preds.set(level, pred_save);
     				succs.set(level, curr_save);
     			}
-    			return(curr.key == key);
+    			
+    			return lfound_ret;
     		}
 	}
  //   @Override
@@ -219,10 +226,4 @@ public class LockFreeSkiplist implements Skiplist
         System.out.println("---------------------");
         System.out.println();
     }
-
-	@Override
-	public Integer find(Integer value, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

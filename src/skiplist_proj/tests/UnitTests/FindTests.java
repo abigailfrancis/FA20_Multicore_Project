@@ -36,8 +36,8 @@ public class FindTests {
         head = new Node(Integer.MIN_VALUE, height);
 
         // Run with both types of Skiplist
-        testParams.add(new LockBasedSkiplist(head));
-        //testParams.add(new LockFreeSkiplist(head));
+        //testParams.add(new LockBasedSkiplist(head));
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -47,10 +47,10 @@ public class FindTests {
     {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        this.skiplist.display();
         // Act
         Integer level = this.skiplist.find(5, preds, succs);
-
+        this.skiplist.display();
         // Assert
         assertTrue(level == 1);
     }
@@ -60,10 +60,10 @@ public class FindTests {
     {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        this.skiplist.display();
         // Act
         Integer level = this.skiplist.find(2, preds, succs);
-
+        this.skiplist.display();
         // Assert
         assertTrue(level == 0);
     }
@@ -73,10 +73,10 @@ public class FindTests {
     {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        this.skiplist.display();
         // Act
         Integer level = this.skiplist.find(500, preds, succs);
-
+        this.skiplist.display();
         // Assert
         assertTrue(level == -1);
     }
