@@ -17,7 +17,7 @@ public class TestData
     {
         throw new IllegalStateException("Utility class");
     }
-
+    private static Random rand = new Random();
     /**
      * Populates head, preds, and succs with values for an empty Skiplist
      * @param head The head node for the Skiplist
@@ -133,7 +133,6 @@ public class TestData
      * @param listOfIntegers
      */
     public static void createListOfRandomIntegers(int[] listOfIntegers) {
-        Random rand = new Random();
         for(int i = 0; i < listOfIntegers.length; i++)
         {
             listOfIntegers[i] = rand.nextInt();

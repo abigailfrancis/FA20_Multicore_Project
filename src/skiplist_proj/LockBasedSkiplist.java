@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicMarkableReference;
 public class LockBasedSkiplist implements Skiplist
 {
     private AtomicMarkableReference<Node> head = new AtomicMarkableReference<>(null, false);
-    private Random rnd = new Random();
+    private static Random rnd = new Random();
 
     public LockBasedSkiplist(Node head)
     {
@@ -278,7 +278,6 @@ public class LockBasedSkiplist implements Skiplist
             System.out.println();
         }
         System.out.println("---------------------");
-        System.out.println();
     }
 
     /**

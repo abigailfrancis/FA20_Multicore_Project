@@ -39,7 +39,7 @@ public class RemoveTestsMultithreaded
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        //testParams.add(new LockFreeSkiplist(head));
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -56,16 +56,16 @@ public class RemoveTestsMultithreaded
     @Test
     public void removeIntegersFromEmptyList() {
         // Arrange
-        TestData.setupEmptySkiplist(this.head);
+        TestData.setupEmptySkiplist(head);
         int[] listOfIntegersToAdd = {};
         int[] listOfIntegersToRemove = {1, 2, 3};
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
 
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
-
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
+       // SkiplistRunnable.runTest(false, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
         // Assert
-        Node node1 = this.head.next[0].getReference();
+        Node node1 = head.next[0].getReference();
         assertTrue(node1.getItem() == Integer.MAX_VALUE);
     }
 
@@ -75,18 +75,18 @@ public class RemoveTestsMultithreaded
     @Test
     public void removeAllIntegersFromPopulatedSkiplist() {
         // Arrange
-        TestData.setupTestSkiplist1(this.head, preds, succs);
+        TestData.setupTestSkiplist1(head, preds, succs);
         int[] listOfIntegersToAdd = {};
         int[] listOfIntegersToRemove = {2, 5, 8, 9, 11, 18, 25};
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
         this.skiplist.display();
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
         this.skiplist.display();
         // Assert
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
-            Node node1 = this.head.next[i].getReference();
+            Node node1 = head.next[i].getReference();
             assertTrue(node1.getItem() == Integer.MAX_VALUE);
         }
     }
