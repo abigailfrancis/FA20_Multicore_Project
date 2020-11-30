@@ -94,6 +94,7 @@ public class AddTestsMultithreaded
         System.out.println("AFTER:");
         this.skiplist.display();
         // Assert
+        
         // Go through the bottom level of the skiplist and look for all 3 of the added integers
         Node next = head.next[0].getReference();
         int indexOfAddedItem = 0;
@@ -138,7 +139,7 @@ public class AddTestsMultithreaded
         Node next = head.next[0].getReference();
         int indexOfAddedItem = 0;
         int skipListLength = 0;
-
+        this.skiplist.display();
         while(next.getItem() != Integer.MAX_VALUE)
         {
             if(indexOfAddedItem < listOfIntegersToAdd.length && next.getItem() == listOfIntegersToAdd[indexOfAddedItem])
@@ -148,7 +149,8 @@ public class AddTestsMultithreaded
             next = next.next[0].getReference();
             skipListLength++;
         }
-
+        System.out.println("INDEX OF ADDED ITEM (100 expected): " + indexOfAddedItem);
+        System.out.println("SKIPLIST LENGTH (100 expected): " + skipListLength);
         assertTrue(indexOfAddedItem == 100);
         assertTrue(skipListLength == 100);
     }

@@ -39,7 +39,7 @@ public class SkiplistRunnable implements Runnable
         int numAdds = listOfIntegersToAdd.length;
         int numRemoves = listOfIntegersToRemove.length;
         int numChanges = numAdds + numRemoves;
-
+        
         ExecutorService executorService = Executors.newFixedThreadPool(8);
         List<Future> futures = new ArrayList<>();
         for (int i = 0; i < numAdds; i++) {

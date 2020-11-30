@@ -1,0 +1,181 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 100663296 bytes for Failed to commit area from 0x00000000a1400000 to 0x00000000a7400000 of length 100663296.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (t:/workspace/open/src/hotspot/os/windows/os_windows.cpp:3221), pid=9728, tid=25276
+#
+# JRE version:  (10.0.2+13) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (10.0.2+13, mixed mode, aot, tiered, compressed oops, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -ea -Dfile.encoding=Cp1252 org.eclipse.jdt.internal.junit.runner.RemoteTestRunner -version 3 -port 55876 -testLoaderClass org.eclipse.jdt.internal.junit5.runner.JUnit5TestLoader -loaderpluginname org.eclipse.jdt.junit5.runtime -classNames skiplist_proj.tests.UnitTests.AddTestsMultithreaded
+
+Host: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx  , 8 cores, 5G,  Windows 10 , 64 bit Build 18362 (10.0.18362.1110)
+Time: Mon Nov 30 10:30:54 2020 Central Standard Time elapsed time: 0 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000002abca292800):  JavaThread "Unknown thread" [_thread_in_vm, id=25276, stack(0x000000cb9f400000,0x000000cb9f500000)]
+
+Stack: [0x000000cb9f400000,0x000000cb9f500000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x5a01a9]
+V  [jvm.dll+0x6bcf31]
+V  [jvm.dll+0x6be126]
+V  [jvm.dll+0x6be7b3]
+V  [jvm.dll+0x234978]
+V  [jvm.dll+0x59dac4]
+V  [jvm.dll+0x592825]
+V  [jvm.dll+0x2f632b]
+V  [jvm.dll+0x2f6295]
+V  [jvm.dll+0x2f6172]
+V  [jvm.dll+0x2f8366]
+V  [jvm.dll+0x344293]
+V  [jvm.dll+0x3449a6]
+V  [jvm.dll+0x344393]
+V  [jvm.dll+0x2c4628]
+V  [jvm.dll+0x2c5771]
+V  [jvm.dll+0x69d1db]
+V  [jvm.dll+0x69e9fc]
+V  [jvm.dll+0x3519e9]
+V  [jvm.dll+0x6856a2]
+V  [jvm.dll+0x3ba0c3]
+V  [jvm.dll+0x3bc261]
+C  [javaw.exe+0x3541]
+C  [javaw.exe+0xe1cf]
+C  [javaw.exe+0xe376]
+C  [KERNEL32.DLL+0x17c24]
+C  [ntdll.dll+0x6d4d1]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x000002abc81fbb70, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+
+Other Threads:
+  0x000002abca2ac800 GCTaskThread "GC Thread#0" [stack: 0x000000cb9f500000,0x000000cb9f600000] [id=5148]
+  0x000002abca2af000 GCTaskThread "GC Thread#1" [stack: 0x000000cb9f600000,0x000000cb9f700000] [id=16948]
+  0x000002abca2b0800 GCTaskThread "GC Thread#2" [stack: 0x000000cb9f700000,0x000000cb9f800000] [id=24268]
+  0x000002abca2b3800 GCTaskThread "GC Thread#3" [stack: 0x000000cb9f800000,0x000000cb9f900000] [id=23508]
+  0x000002abca2b5800 GCTaskThread "GC Thread#4" [stack: 0x000000cb9f900000,0x000000cb9fa00000] [id=8680]
+  0x000002abca2b8800 GCTaskThread "GC Thread#5" [stack: 0x000000cb9fa00000,0x000000cb9fb00000] [id=3312]
+  0x000002abca2b9800 GCTaskThread "GC Thread#6" [stack: 0x000000cb9fb00000,0x000000cb9fc00000] [id=13680]
+  0x000002abca2bb000 GCTaskThread "GC Thread#7" [stack: 0x000000cb9fc00000,0x000000cb9fd00000] [id=25292]
+  0x000002abca30c000 ConcurrentGCThread "G1 Main Marker" [stack: 0x000000cb9fd00000,0x000000cb9fe00000] [id=2132]
+  0x000002abca310800 ConcurrentGCThread "G1 Conc#0" [stack: 0x000000cb9fe00000,0x000000cb9ff00000] [id=22796]
+  0x000002abca312800 ConcurrentGCThread "G1 Conc#1" [stack: 0x000000cb9ff00000,0x000000cba0000000] [id=24728]
+
+[error occurred during error reporting (printing all threads), id 0xe0000002]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x000002abca290690] Heap_lock - owner thread: 0x000002abca292800
+
+Heap address: 0x00000000a1400000, size: 1516 MB, Compressed Oops mode: Non-zero based: 0x00000000a1400000
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff674d00000 - 0x00007ff674d3e000 	C:\Program Files\Java\jre-10.0.2\bin\javaw.exe
+0x00007ff9e4f40000 - 0x00007ff9e5130000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ff9e3fb0000 - 0x00007ff9e4062000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ff9e27d0000 - 0x00007ff9e2a75000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ff9e40e0000 - 0x00007ff9e4183000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ff9e3f10000 - 0x00007ff9e3fae000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ff9e4c50000 - 0x00007ff9e4ce7000 	C:\WINDOWS\System32\sechost.dll
+0x00007ff9e3550000 - 0x00007ff9e3670000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ff9e30b0000 - 0x00007ff9e3244000 	C:\WINDOWS\System32\USER32.dll
+0x00007ff9e1ec0000 - 0x00007ff9e1ee1000 	C:\WINDOWS\System32\win32u.dll
+0x00007ff9e2ff0000 - 0x00007ff9e3016000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ff9e2b80000 - 0x00007ff9e2d16000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ff9e26e0000 - 0x00007ff9e277e000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ff9e2a80000 - 0x00007ff9e2b7a000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ff9c8400000 - 0x00007ff9c8684000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.18362.1198_none_9e820b57e45ad92f\COMCTL32.dll
+0x00007ff9e3670000 - 0x00007ff9e39a5000 	C:\WINDOWS\System32\combase.dll
+0x00007ff9e2f70000 - 0x00007ff9e2ff0000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ff9e00c0000 - 0x00007ff9e00ca000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ff9e3250000 - 0x00007ff9e327e000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ff9a4c40000 - 0x00007ff9a4d2f000 	C:\Program Files\Java\jre-10.0.2\bin\msvcr120.dll
+0x00007ff9a3900000 - 0x00007ff9a39a6000 	C:\Program Files\Java\jre-10.0.2\bin\msvcp120.dll
+0x000000006b260000 - 0x000000006bcd0000 	C:\Program Files\Java\jre-10.0.2\bin\server\jvm.dll
+0x00007ff9e40d0000 - 0x00007ff9e40d8000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ff9cb3f0000 - 0x00007ff9cb3f9000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ff9e3430000 - 0x00007ff9e349f000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ff9df1b0000 - 0x00007ff9df1d4000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ff9df180000 - 0x00007ff9df1ad000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007ff9e2780000 - 0x00007ff9e27ca000 	C:\WINDOWS\System32\cfgmgr32.dll
+0x00007ff9d2750000 - 0x00007ff9d275f000 	C:\Program Files\Java\jre-10.0.2\bin\verify.dll
+0x00007ff9e0670000 - 0x00007ff9e0864000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ff9ca100000 - 0x00007ff9ca12a000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ff9cc960000 - 0x00007ff9cc987000 	C:\Program Files\Java\jre-10.0.2\bin\java.dll
+0x00007ff9cc7f0000 - 0x00007ff9cc806000 	C:\Program Files\Java\jre-10.0.2\bin\zip.dll
+0x00007ff9d1370000 - 0x00007ff9d137a000 	C:\Program Files\Java\jre-10.0.2\bin\jimage.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\Java\jre-10.0.2\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.18362.1198_none_9e820b57e45ad92f;C:\Program Files\Java\jre-10.0.2\bin\server
+
+VM Arguments:
+jvm_args: -ea -Dfile.encoding=Cp1252 
+java_command: org.eclipse.jdt.internal.junit.runner.RemoteTestRunner -version 3 -port 55876 -testLoaderClass org.eclipse.jdt.internal.junit5.runner.JUnit5TestLoader -loaderpluginname org.eclipse.jdt.junit5.runtime -classNames skiplist_proj.tests.UnitTests.AddTestsMultithreaded
+java_class_path (initial): C:\Users\abige\eclipse-workspace\MPFA20_Project\bin;C:\Users\abige\.p2\pool\plugins\org.junit.jupiter.api_5.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.jupiter.engine_5.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.jupiter.migrationsupport_5.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.jupiter.params_5.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.platform.commons_1.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.platform.engine_1.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.platform.launcher_1.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.platform.runner_1.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.platform.suite.api_1.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit.vintage.engine_5.4.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.opentest4j_1.1.1.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.apiguardian_1.0.0.v20190212-2109.jar;C:\Users\abige\.p2\pool\plugins\org.junit_4.12.0.v201504281640\junit.jar;C:\Users\abige\.p2\pool\plugins\org.hamcrest.core_1.3.0.v20180420-1519.jar;C:\Users\abige\eclipse\java-2019-06\eclipse\configuration\org.eclipse.osgi\225\0\.cp;C:\Users\abige\eclipse\java-2019-06\eclipse\configuration\org.eclipse.osgi\223\0\.cp
+Launcher Type: SUN_STANDARD
+
+Logging:
+Log output configuration:
+#0: stdout all=warning uptime,level,tags
+#1: stderr all=off uptime,level,tags
+
+Environment Variables:
+PATH=C:/Program Files/Java/jre1.8.0_221/bin/server;C:/Program Files/Java/jre1.8.0_221/bin;C:/Program Files/Java/jre1.8.0_221/lib/amd64;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0\libnvvp;;;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\libnvvp;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\LyX 2.3\Perl\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Go\bin;C:\Program Files\NVIDIA Corporation\Nsight Compute 2020.1.1\;C:\Program Files\PuTTY\;C:\Users\abige\AppData\Local\Microsoft\WindowsApps;C:\Users\abige\AppData\Local\Programs\MiKTeX 2.9\miktex\bin\x64\;C:\Users\abige\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\abige\go\bin;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\bin\Hostx64\x64;;C:\WINDOWS\system32;
+USERNAME=abige
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 23 Model 24 Stepping 1, AuthenticAMD
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10 , 64 bit Build 18362 (10.0.18362.1110)
+
+CPU:total 8 (initial active 8) (8 cores per cpu, 2 threads per core) family 23 model 24 stepping 1, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, mmxext, 3dnowpref, lzcnt, sse4a, ht, tsc, tscinvbit, tscinv, bmi1, bmi2, adx, sha, fma
+
+Memory: 4k page, physical 6203612k(479476k free), swap 25077980k(62632k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (10.0.2+13) for windows-amd64 JRE (10.0.2+13), built on Jun 28 2018 01:57:56 by "mach5one" with MS VC++ 12.0 (VS2013)
+
+END.

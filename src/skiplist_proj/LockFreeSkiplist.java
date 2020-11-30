@@ -45,7 +45,6 @@ public class LockFreeSkiplist implements Skiplist
         List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
         List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
         //for (int i = 0; i < MAX_HEIGHT; i++)
-        System.out.println("Random Level: " + topLevel);
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             preds.add(i, null);
@@ -60,21 +59,20 @@ public class LockFreeSkiplist implements Skiplist
         		for(int level = bottomLevel; level<= topLevel; level++) {
         			Node succ = succs.get(level).getReference();
         			newNode.next[level].set(succ, false);
-        			//newNode.next[level].get().setMarked(false); //not totally sure this is right
         		}
-        		AtomicMarkableReference<Node> pred = preds.get(bottomLevel);
+        		//AtomicMarkableReference<Node> pred = preds.get(bottomLevel);
+        		Node pred = preds.get(bottomLevel).getReference();
         		Node succ = succs.get(bottomLevel).getReference();
 
-        		if(!pred.getReference().next[bottomLevel].compareAndSet(succ, newNode, false, false)) {
+        		if(!pred.next[bottomLevel].compareAndSet(succ, newNode, false, false)) {
         				continue;
         		}
         		for(int level = bottomLevel+1; level<= topLevel; level++) {
         			while(true) {
-        				pred = preds.get(level);
+        				pred = preds.get(level).getReference();
         				succ = succs.get(level).getReference();
-        				if(pred.getReference().next[level].compareAndSet(succ, newNode, false, false))
+        				if(pred.next[level].compareAndSet(succ, newNode, false, false))
         					break;
-        				this.display();
         				find(value, preds, succs);	
         			}
         		}
@@ -157,7 +155,7 @@ public class LockFreeSkiplist implements Skiplist
     					succ = curr.next[level].get(marked);
     					succ_save = curr.next[level];
     					while(marked[0]) {
-    						snip = pred_save.getReference().next[level].compareAndSet(curr, succ, false, false);
+    						snip = pred.next[level].compareAndSet(curr, succ, false, false);
     						if(!snip) continue retry;
     						curr = pred.next[level].getReference();
     						curr_save = pred.next[level]; 
@@ -175,6 +173,8 @@ public class LockFreeSkiplist implements Skiplist
     						break;
     					}
     				}
+    				//preds.get(level).set(pred, false);
+    				//succs.get(level).set(curr, false);
     				preds.set(level, pred_save);
     				succs.set(level, curr_save);
     			}
