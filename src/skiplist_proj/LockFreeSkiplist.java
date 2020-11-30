@@ -57,6 +57,7 @@ public class LockFreeSkiplist implements Skiplist
         		}
         		AtomicMarkableReference<Node> pred = preds.get(bottomLevel);
         		Node succ = succs.get(bottomLevel).getReference();
+
         		if(!pred.getReference().next[bottomLevel].compareAndSet(succ, newNode, false, false)) {
         				continue;
         		}

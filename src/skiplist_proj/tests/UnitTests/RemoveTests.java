@@ -39,8 +39,8 @@ public class RemoveTests
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
 
         // Run with both types of Skiplist
-        testParams.add(new LockBasedSkiplist(head));
-        //testParams.add(new LockFreeSkiplist(head));
+        //testParams.add(new LockBasedSkiplist(head));
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
