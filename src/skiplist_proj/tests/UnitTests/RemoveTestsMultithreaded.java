@@ -79,10 +79,10 @@ public class RemoveTestsMultithreaded
         int[] listOfIntegersToAdd = {};
         int[] listOfIntegersToRemove = {2, 5, 8, 9, 11, 18, 25};
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
-
+        this.skiplist.display();
         // Act
         SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
-
+        this.skiplist.display();
         // Assert
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
