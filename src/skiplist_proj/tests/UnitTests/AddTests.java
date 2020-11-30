@@ -40,8 +40,8 @@ public class AddTests
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
 
         // Run with both types of Skiplist
+        testParams.add(new LockFreeSkiplist(head));
         testParams.add(new LockBasedSkiplist(head));
-        //testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -51,7 +51,6 @@ public class AddTests
     {
         this.skiplist.display();
     }
-
     /**
      * Verifies behavior when one integer is added to an empty Skiplist
      */

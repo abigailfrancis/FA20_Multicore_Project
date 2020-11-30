@@ -18,6 +18,14 @@ public class LockFreeSkiplist implements Skiplist
     //FIXME
     public LockFreeSkiplist(Node head)
     {
+		/*
+		 * final Node head_new = new Node(head.getItem(),head.getTopLevel());
+		 * this.head.set(head_new, head.isMarked()); for(int i = 0; i <
+		 * head.next.length; i++) { this.head.getReference().next[i] = new
+		 * AtomicMarkableReference<Node>(null, false);
+		 * this.head.getReference().next[i].set(head.next[i].getReference(),
+		 * head.next[i].isMarked()); }
+		 */
         this.head.set(head, head.isMarked());
         //this.tail.set(head.next[bottomLevel], head.isMarked());
     }
@@ -37,6 +45,7 @@ public class LockFreeSkiplist implements Skiplist
         List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
         List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
         //for (int i = 0; i < MAX_HEIGHT; i++)
+        System.out.println("Random Level: " + topLevel);
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             preds.add(i, null);

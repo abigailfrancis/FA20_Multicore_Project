@@ -10,6 +10,8 @@ import skiplist_proj.tests.TestData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -37,8 +39,9 @@ public class AddTestsMultithreaded
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
 
         // Run with both types of Skiplist
+        testParams.add(new LockFreeSkiplist(head));
         testParams.add(new LockBasedSkiplist(head));
-
+        
         return testParams;
     }
 
@@ -60,11 +63,14 @@ public class AddTestsMultithreaded
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
 
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        //SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(false, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        
 
         // Assert
         // Verify that the bottom level has 1 -> 3 -> 5
         Node node1 = this.head.next[0].getReference();
+        
         assertTrue(this.head.next[0].getReference().getItem() == 1);
 
         Node node2 = node1.next[0].getReference();
@@ -123,7 +129,7 @@ public class AddTestsMultithreaded
 
         // Act
         SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
-
+        
         // Assert
         // Go through the bottom level of the skiplist and look for all 3 of the added integers
         Node next = this.head.next[0].getReference();
