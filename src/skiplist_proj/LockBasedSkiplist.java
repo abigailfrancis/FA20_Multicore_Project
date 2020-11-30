@@ -83,7 +83,7 @@ public class LockBasedSkiplist implements Skiplist
                 if (!valid) continue;
 
                 // Create the new Node
-                Node node = new Node(value, topLevel + 1);
+                Node node = new Node(value, topLevel);
                 AtomicMarkableReference<Node> newNode = new AtomicMarkableReference<>(node, false);
 
                 // Starting at the bottom of the Skiplist
@@ -188,7 +188,7 @@ public class LockBasedSkiplist implements Skiplist
                         pred = preds.get(level);
                         pred.getReference().lock();
                         highestLocked = level;
-                        valid = !pred.getReference().isMarked() && pred.getReference().next[level] == victim;
+                        valid = !pred.getReference().isMarked() && pred.getReference().next[level].getReference() == victim.getReference();
                     }
 
                     if (!valid) continue;
