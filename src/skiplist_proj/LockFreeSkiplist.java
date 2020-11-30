@@ -91,17 +91,14 @@ public class LockFreeSkiplist implements Skiplist
         List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
         Node succ;
        // Node succ_new;
-
+        for (int i = 0; i <= MAX_HEIGHT; i++)
+        {
+            preds.add(i, null);
+            succs.add(i, null);
+        }
         while(true) {
         	
         	int found = find(value, preds, succs);
-            preds.clear();
-            succs.clear();
-            for (int i = 0; i < succs.get(bottomLevel).getReference().getTopLevel(); i++)
-            {
-                preds.add(i, null);
-                succs.add(i, null);
-            }
         	if(!(found != -1)) {
         		return false;
         	}else {

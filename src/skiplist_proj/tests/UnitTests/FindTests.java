@@ -36,7 +36,7 @@ public class FindTests {
         head = new Node(Integer.MIN_VALUE, height);
 
         // Run with both types of Skiplist
-        //testParams.add(new LockBasedSkiplist(head));
+        testParams.add(new LockBasedSkiplist(head));
         testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
