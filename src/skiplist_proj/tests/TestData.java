@@ -56,26 +56,47 @@ public class TestData
         //   1        head ->      5 ->      9 ->       18 ->       end
         //   0        head -> 2 -> 5 -> 8 -> 9 -> 11 -> 18 -> 25 -> end
 
+//        AtomicMarkableReference<Node> node2 = new AtomicMarkableReference<>(null, false);
+//        node2.set(createNewFullyLinkedNode(2, 1), false);
+//
+//        AtomicMarkableReference<Node> node5 = new AtomicMarkableReference<>(null, false);
+//        node5.set(createNewFullyLinkedNode(5, 2), false);
+//
+//        AtomicMarkableReference<Node> node8 = new AtomicMarkableReference<>(null, false);
+//        node8.set(createNewFullyLinkedNode(8, 1), false);
+//
+//        AtomicMarkableReference<Node> node9 = new AtomicMarkableReference<>(null, false);
+//        node9.set(createNewFullyLinkedNode(9, 3), false);
+//
+//        AtomicMarkableReference<Node> node11 = new AtomicMarkableReference<>(null, false);
+//        node11.set(createNewFullyLinkedNode(11, 1), false);
+//
+//        AtomicMarkableReference<Node> node18 = new AtomicMarkableReference<>(null, false);
+//        node18.set(createNewFullyLinkedNode(18, 2), false);
+//
+//        AtomicMarkableReference<Node> node25 = new AtomicMarkableReference<>(null, false);
+//        node25.set(createNewFullyLinkedNode(25, 1), false);
+
         AtomicMarkableReference<Node> node2 = new AtomicMarkableReference<>(null, false);
-        node2.set(createNewFullyLinkedNode(2, 1), false);
+        node2.set(createNewFullyLinkedNode(2, 0), false);
 
         AtomicMarkableReference<Node> node5 = new AtomicMarkableReference<>(null, false);
-        node5.set(createNewFullyLinkedNode(5, 2), false);
+        node5.set(createNewFullyLinkedNode(5, 1), false);
 
         AtomicMarkableReference<Node> node8 = new AtomicMarkableReference<>(null, false);
-        node8.set(createNewFullyLinkedNode(8, 1), false);
+        node8.set(createNewFullyLinkedNode(8, 0), false);
 
         AtomicMarkableReference<Node> node9 = new AtomicMarkableReference<>(null, false);
-        node9.set(createNewFullyLinkedNode(9, 3), false);
+        node9.set(createNewFullyLinkedNode(9, 2), false);
 
         AtomicMarkableReference<Node> node11 = new AtomicMarkableReference<>(null, false);
-        node11.set(createNewFullyLinkedNode(11, 1), false);
+        node11.set(createNewFullyLinkedNode(11, 0), false);
 
         AtomicMarkableReference<Node> node18 = new AtomicMarkableReference<>(null, false);
-        node18.set(createNewFullyLinkedNode(18, 2), false);
+        node18.set(createNewFullyLinkedNode(18, 1), false);
 
         AtomicMarkableReference<Node> node25 = new AtomicMarkableReference<>(null, false);
-        node25.set(createNewFullyLinkedNode(25, 1), false);
+        node25.set(createNewFullyLinkedNode(25, 0), false);
 
         AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
         tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT), false);

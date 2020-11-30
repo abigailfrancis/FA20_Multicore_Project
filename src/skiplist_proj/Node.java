@@ -48,7 +48,7 @@ public class Node
      */
     public Integer getTopLevel()
     {
-        return topLevel-1;
+        return topLevel;
     }
 
     /**
