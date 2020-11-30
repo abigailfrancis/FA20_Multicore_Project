@@ -60,9 +60,11 @@ public class CombineAddsAndRemoves
         TestData.setupTestSkiplist1(head, preds, succs);
 
         // Act
+        this.printSkiplist();
         boolean addSucceeded = this.skiplist.add(3);
+        this.printSkiplist();
         boolean removeSucceeded = this.skiplist.rm(3);
-
+        this.printSkiplist();
         // Assert
         assertTrue(addSucceeded);
         assertTrue(removeSucceeded);

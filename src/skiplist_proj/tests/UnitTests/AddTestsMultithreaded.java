@@ -38,7 +38,6 @@ public class AddTestsMultithreaded
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        //testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
