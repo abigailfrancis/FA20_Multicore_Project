@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
- 
+import static org.junit.Assert.assertTrue;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 /**
@@ -63,6 +63,23 @@ public void printSkiplist()
 {
     this.skiplist.display();
 }
-    
+public boolean isSize(Integer expected)
+{
+	 Node next = head.next[0].getReference();
+     int indexOfAddedItem = 0;
+     int skipListLength = 0;
+     this.skiplist.display();
+     while(next.getItem() != Integer.MAX_VALUE)
+     {
+         if(indexOfAddedItem < expected)
+         {
+             indexOfAddedItem++;
+         }
+         next = next.next[0].getReference();
+         skipListLength++;
+     }
+     return ((indexOfAddedItem == expected)&&(skipListLength == expected));
+}
+
 }
 
