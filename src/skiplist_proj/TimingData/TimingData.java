@@ -1,11 +1,11 @@
 package skiplist_proj.TimingData;
 import skiplist_proj.LockBasedSkiplist;
+import skiplist_proj.LockFreeSkiplist;
 import skiplist_proj.Node;
+import skiplist_proj.Skiplist;
 import skiplist_proj.tests.TestData;
 import skiplist_proj.tests.UnitTests.SkiplistRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 /**
@@ -14,10 +14,8 @@ import static skiplist_proj.Skiplist.MAX_HEIGHT;
 public class TimingData
 {
 	private static Node head;
-    private LockBasedSkiplist skiplist;
-    private static List<Node> preds = new ArrayList<>();
-    private static List<Node> succs = new ArrayList<>();
-    
+    private Skiplist skiplist;
+
     public TimingData()
     {
     	// Initialize the head node
@@ -34,7 +32,7 @@ public class TimingData
 	    if(useLockBasedSkiplist) {
 	    	this.skiplist = new LockBasedSkiplist(head);
 	    }else {
-	    	//this.skiplist = new LockFreeSkiplist(head);
+	    	this.skiplist = new LockFreeSkiplist(head);
 	    }
 	   
 	    // Act

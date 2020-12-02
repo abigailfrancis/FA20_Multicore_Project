@@ -43,7 +43,6 @@ public class LockFreeSkiplist implements Skiplist
         			Node succ = succs.get(level);
         			newNode.next[level].set(succ, false);
         		}
-        		//AtomicMarkableReference<Node> pred = preds.get(bottomLevel);
         		Node pred = preds.get(bottomLevel);
         		Node succ = succs.get(bottomLevel);
 
@@ -79,7 +78,7 @@ public class LockFreeSkiplist implements Skiplist
         List<Node> preds = new ArrayList<>();
         List<Node> succs = new ArrayList<>();
         Node succ;
-       // Node succ_new;
+
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             preds.add(i, null);
@@ -88,7 +87,7 @@ public class LockFreeSkiplist implements Skiplist
         while(true) {
         	
         	int found = find(value, preds, succs);
-        	if(!(found != -1)) {
+        	if(found == -1) {
         		return false;
         	}else {
         		Node nodeToRemove = succs.get(bottomLevel);

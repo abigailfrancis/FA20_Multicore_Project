@@ -34,7 +34,6 @@ public class TestData
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             // Set all of head's 'next' values to the tail
-            //head.next[i] = tail;
         	head.next[i] = new AtomicMarkableReference<>(new Node(Integer.MAX_VALUE, MAX_HEIGHT), false);
         }
     }
@@ -83,7 +82,7 @@ public class TestData
         head.next[2].set(node9.getReference(), node9.isMarked());
         head.next[3].set(tail.getReference(), tail.isMarked());
 
-        node2.getReference().next[0].set(node5.getReference(), node5.isMarked());;
+        node2.getReference().next[0].set(node5.getReference(), node5.isMarked());
 
         node5.getReference().next[0].set(node8.getReference(), node8.isMarked());
         node5.getReference().next[1].set(node9.getReference(), node9.isMarked());

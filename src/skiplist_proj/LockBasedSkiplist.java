@@ -145,7 +145,7 @@ public class LockBasedSkiplist implements Skiplist
             // If the node is present in the Skiplist, fully linked, not marked, and is on the right level
             boolean shouldEvaluateNode = isMarked ||
                     ((levelFound != -1)
-                            &&( victim != null)
+                            && ( victim != null)
                             && (victim != null)
                             && (victim.isFullyLinked()
                             && victim.getTopLevel().equals(levelFound)

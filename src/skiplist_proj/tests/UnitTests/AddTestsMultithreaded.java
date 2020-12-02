@@ -92,7 +92,7 @@ public class AddTestsMultithreaded
         System.out.println("BEFORE:");
         this.skiplist.display();
         // Act
-        SkiplistRunnable.runTest(useLockBasedSkiplist, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+        SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
         System.out.println("AFTER:");
         this.skiplist.display();
         // Assert
