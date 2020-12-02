@@ -61,11 +61,11 @@ public class CombineAddsAndRemovesMultithreaded
         TestData.setupEmptySkiplist(head);
 
         // Add nodes 0-149
-        int[] listOfIntegersToAdd = new int[150];
+        int[] listOfIntegersToAdd = new int[1500];
         TestData.createListOfConsecutiveIntegers(listOfIntegersToAdd);
 
         // Remove nodes 0-147
-        int[] listOfIntegersToRemove = new int[148];
+        int[] listOfIntegersToRemove = new int[1498];
         TestData.createListOfConsecutiveIntegers(listOfIntegersToRemove);
 
         // Determine if we should create a lock-based or lock-free skiplist
@@ -78,16 +78,16 @@ public class CombineAddsAndRemovesMultithreaded
         // Verify that the bottom level contains at least Node 98 and 99
         // (The rest of the nodes may or may not be present depending on when the individual threads executed)
         Node node = head.next[0].getReference();
-        boolean found148 = false;
-        boolean found149 = false;
+        boolean found1498 = false;
+        boolean found1499 = false;
         while (node.getItem() != Integer.MAX_VALUE) {
-            if (node.getItem() == 148) found148 = true;
-            if (node.getItem() == 149) found149 = true;
+            if (node.getItem() == 1498) found1498 = true;
+            if (node.getItem() == 1499) found1499 = true;
 
             node = node.next[0].getReference();
         }
-        assertTrue(found148);
-        assertTrue(found149);
+        assertTrue(found1498);
+        assertTrue(found1499);
     }
 
     /**
@@ -99,11 +99,11 @@ public class CombineAddsAndRemovesMultithreaded
         TestData.setupTestSkiplist1(head, preds, succs);
 
         // Add nodes 0-149
-        int[] listOfIntegersToAdd = new int[150];
+        int[] listOfIntegersToAdd = new int[1500];
         TestData.createListOfConsecutiveIntegers(listOfIntegersToAdd);
 
         // Remove nodes 0-147
-        int[] listOfIntegersToRemove = new int[148];
+        int[] listOfIntegersToRemove = new int[1498];
         TestData.createListOfConsecutiveIntegers(listOfIntegersToRemove);
 
         // Determine if we should create a lock-based or lock-free skiplist
@@ -116,16 +116,16 @@ public class CombineAddsAndRemovesMultithreaded
         // Verify that the bottom level contains at least Node 98 and 99
         // (The rest of the nodes may or may not be present depending on when the individual threads executed)
         Node node = head.next[0].getReference();
-        boolean found148 = false;
-        boolean found149 = false;
+        boolean found1498 = false;
+        boolean found1499 = false;
         while (node.getItem() != Integer.MAX_VALUE)
         {
-            if (node.getItem() == 148) found148 = true;
-            if (node.getItem() == 149) found149 = true;
+            if (node.getItem() == 1498) found1498 = true;
+            if (node.getItem() == 1499) found1499 = true;
 
             node = node.next[0].getReference();
         }
-        assertTrue(found148);
-        assertTrue(found149);
+        assertTrue(found1498);
+        assertTrue(found1499);
     }
 }
