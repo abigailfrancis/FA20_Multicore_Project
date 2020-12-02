@@ -8,7 +8,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		// take timing data
-		//RunLockFreeTests();
+		//System.out.println(Runtime.getRuntime().availableProcessors());
+		RunLockFreeTests();
 		RunLockBasedTests();
 
 	}
@@ -25,7 +26,7 @@ public class Main {
 		long[] LF_Rm_EndTimes_large = new long[100];
 
 		// TimingData LockFreeTimingData = new TimingData();
-		for (int i = 0; i < 60; i++) {
+		for (int i = 0; i < 40; i++) {
 			System.out.println("Run " + i);
 			TimingData LockFreeTimingData = new TimingData();
 			// add few nodes
@@ -52,13 +53,13 @@ public class Main {
 			successful = false;
 			while(!successful) {
 				LF_Add_StartTimes_large[i] = System.nanoTime();
-				LockFreeTimingData.TimingTest_add(50, false);
+				LockFreeTimingData.TimingTest_add(100, false);
 				LF_Add_EndTimes_large[i] = System.nanoTime();
 				
-				successful = LockFreeTimingData.isSize(50);
+				successful = LockFreeTimingData.isSize(100);
 				System.out.println(successful);
 				LF_Rm_StartTimes_large[i] = System.nanoTime();
-				LockFreeTimingData.TimingTest_rm(50, false);
+				LockFreeTimingData.TimingTest_rm(100, false);
 				LF_Rm_EndTimes_large[i] = System.nanoTime();
 			}
 
@@ -93,7 +94,7 @@ public class Main {
 
 		// TimingData LockFreeTimingData = new TimingData();
 
-		for (int i = 0; i < 60; i++) {
+		for (int i = 0; i < 40; i++) {
 			TimingData LockBasedTimingData = new TimingData();
 			System.out.println("Run " + i);
 			// add few nodes
@@ -120,14 +121,14 @@ public class Main {
 			successful = false;
 			while(!successful) {
 				LB_Add_StartTimes_large[i] = System.nanoTime();
-				LockBasedTimingData.TimingTest_add(50, false);
+				LockBasedTimingData.TimingTest_add(100, false);
 				LB_Add_EndTimes_large[i] = System.nanoTime();
 	
-				successful = LockBasedTimingData.isSize(50);
+				successful = LockBasedTimingData.isSize(100);
 				System.out.println(successful);
 				 
 				LB_Rm_StartTimes_large[i] = System.nanoTime();
-				LockBasedTimingData.TimingTest_rm(50, false);
+				LockBasedTimingData.TimingTest_rm(100, false);
 				LB_Rm_EndTimes_large[i] = System.nanoTime();
 				System.out.println("clear " + LockBasedTimingData.isSize(0));
 			}
