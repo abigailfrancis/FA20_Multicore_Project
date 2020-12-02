@@ -3,31 +3,14 @@ package skiplist_proj;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-//import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicMarkableReference;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class LockFreeSkiplist implements Skiplist
 {
-	//static final int MAX_LEVEL = 10;
-	
     Node head = null;
-    //final AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
-    //private boolean [] foo;
-    //Node newTail = new Node(Integer.MAX_VALUE, MAX_HEIGHT);
-    //FIXME
+
     public LockFreeSkiplist(Node head)
     {
-		/*
-		 * final Node head_new = new Node(head.getItem(),head.getTopLevel());
-		 * this.head.set(head_new, head.isMarked()); for(int i = 0; i <
-		 * head.next.length; i++) { this.head.getReference().next[i] = new
-		 * AtomicMarkableReference<Node>(null, false);
-		 * this.head.getReference().next[i].set(head.next[i].getReference(),
-		 * head.next[i].isMarked()); }
-		 */
         this.head = head;
-        //this.tail.set(head.next[bottomLevel], head.isMarked());
     }
 
     /**
@@ -38,18 +21,18 @@ public class LockFreeSkiplist implements Skiplist
     public boolean add(Integer value)
     {
         int topLevel = getRandomLevel();
-        //topLevel = 3;
         int bottomLevel = 0;
-     // Initialize empty preds and succs lists
-       // Node initNode = new Node(null, topLevel + 1);
+
+        // Initialize empty preds and succs lists
         List<Node> preds = new ArrayList<>();
         List<Node> succs = new ArrayList<>();
-        //for (int i = 0; i < MAX_HEIGHT; i++)
+
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             preds.add(i, null);
             succs.add(i, null);
         }
+
         while(true) {
         	int found = find(value, preds, succs);
         	if(found != -1) {
@@ -141,10 +124,11 @@ public class LockFreeSkiplist implements Skiplist
     	long key = value.hashCode();
     	boolean [] marked = {false};
     	boolean snip;
-		//Node succ_temp = null, curr_temp = null;
+
 		Node pred = null, succ = null, curr = null;
     	retry:
-    		while(true) {
+    		while(true)
+			{
     			pred = head;
     			for(int level = MAX_HEIGHT; level >= bottomLevel; level--) {
     				curr = pred.next[level].getReference();
@@ -166,8 +150,7 @@ public class LockFreeSkiplist implements Skiplist
     						break;
     					}
     				}
-    				//preds.get(level).set(pred, false);
-    				//succs.get(level).set(curr, false);
+
     				preds.set(level, pred);
     				succs.set(level, curr);
     			}
@@ -175,31 +158,6 @@ public class LockFreeSkiplist implements Skiplist
     			return lfound_ret;
     		}
 	}
- //   @Override
-  /*  public boolean contains(Integer value) {
-    	int bottomLevel = 0;
-    	int v = value.hashCode();
-    	boolean [] marked = {false};
-    	AtomicMarkableReference<Node> pred = head, succ = null, curr = null;
-    	for(int level = pred.get().getTopLevel(); level >= bottomLevel; level--) {
-    		curr = pred.get().next[level];
-    		while(true) {
-    			succ = curr.get().next[level];
-    			marked[0] = succ.get().isMarked();
-    			while(marked[0]) {
-    				curr = pred.get().next[level];
-    				succ = curr.get().next[level];    				
-    			}
-    			if(curr.get().key < v) {
-    				pred = curr;
-    				curr = succ;
-    			}else {
-    				break;
-    			}
-    		}
-    	}
-    	return (curr.get().key == v);
-    }*/
     
 	@Override
     public void display()

@@ -3,9 +3,6 @@ package skiplist_proj;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicMarkableReference;
-
-import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 public class LockBasedSkiplist implements Skiplist
 {

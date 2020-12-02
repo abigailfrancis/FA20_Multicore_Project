@@ -24,18 +24,6 @@ public class TestData
      */
     public static void setupEmptySkiplist(Node head)
     {
-        Node tail1 = null;
-        tail1 = new Node(Integer.MAX_VALUE, MAX_HEIGHT);
-
-        /* Node tail2 = null;
-        tail2 = new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
-
-        Node tail3 = null;
-        tail3 = new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
-
-        Node tail4 = null;
-        tail4 = new Node(Integer.MAX_VALUE, MAX_HEIGHT),false); */
-
         // Test Skiplist
         // Level
         //   3        head -> tail
@@ -66,7 +54,6 @@ public class TestData
         //   1        head ->      5 ->      9 ->       18 ->       end
         //   0        head -> 2 -> 5 -> 8 -> 9 -> 11 -> 18 -> 25 -> end
 
-
         AtomicMarkableReference<Node> node2 = new AtomicMarkableReference<>(null, false);
         node2.set(createNewFullyLinkedNode(2, 0), false);
 
@@ -91,10 +78,6 @@ public class TestData
         AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
         tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT), false);
 
-//        head.next[0] = node2;
-//        head.next[1] = node5;
-//        head.next[2] = node9;
-//        head.next[3] = tail;
         head.next[0].set(node2.getReference(), node2.isMarked());
         head.next[1].set(node5.getReference(), node5.isMarked());
         head.next[2].set(node9.getReference(), node9.isMarked());

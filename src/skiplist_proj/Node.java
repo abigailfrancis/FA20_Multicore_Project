@@ -11,6 +11,7 @@ public class Node
     private Integer topLevel;
     public long key;
     public AtomicMarkableReference<Node>[] next;
+
     // Used for Lock-Based implementation
     private Lock lock = new ReentrantLock();
     private volatile boolean marked = false;

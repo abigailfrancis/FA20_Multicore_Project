@@ -10,10 +10,8 @@ import skiplist_proj.tests.TestData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -63,7 +61,7 @@ public class RemoveTestsMultithreaded
 
         // Act
         SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
-       // SkiplistRunnable.runTest(false, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
+
         // Assert
         Node node1 = head.next[0].getReference();
         assertTrue(node1.getItem() == Integer.MAX_VALUE);

@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import java.util.concurrent.atomic.AtomicMarkableReference;
-
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;

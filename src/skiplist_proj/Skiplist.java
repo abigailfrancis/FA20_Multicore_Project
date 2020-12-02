@@ -1,7 +1,6 @@
 package skiplist_proj;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicMarkableReference;
 
 /**
  * Interface for the Skiplist implementations

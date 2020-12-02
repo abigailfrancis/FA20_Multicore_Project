@@ -7,10 +7,8 @@ import skiplist_proj.*;
 import skiplist_proj.tests.TestData;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -80,6 +78,4 @@ public class FindTests {
         // Assert
         assertTrue(level == -1);
     }
-
-    // Todo: add tests with multiple threads
 }
