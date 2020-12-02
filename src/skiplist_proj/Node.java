@@ -24,7 +24,8 @@ public class Node
     public Node(Integer value, int height)
     {
         item = value;
-        key = (long)value.hashCode(); 
+        key = (long)value.hashCode();
+
         next = new AtomicMarkableReference[height + 1];
         for (int i = 0; i < next.length; i++)
         {

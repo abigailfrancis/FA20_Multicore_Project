@@ -19,8 +19,8 @@ public class FindTests {
     private Skiplist skiplist;
     private static int height = MAX_HEIGHT;
 
-    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
+    private static List<Node> preds = new ArrayList<>();
+    private static List<Node> succs = new ArrayList<>();
     private static Node head;
 
     public FindTests(Skiplist skiplist)

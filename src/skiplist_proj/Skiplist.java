@@ -33,7 +33,7 @@ public interface Skiplist {
      * @param succs the list of successors for the node we are searching for
      * @return The level where the value was found, otherwise -1
      */
-    Integer find(Integer value, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs);
+    Integer find(Integer value, List<Node> preds, List<Node> succs);
 
     /**
      * Display the Skiplist

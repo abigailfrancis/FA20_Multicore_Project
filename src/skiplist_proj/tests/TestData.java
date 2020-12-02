@@ -24,8 +24,17 @@ public class TestData
      */
     public static void setupEmptySkiplist(Node head)
     {
-        AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
-        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
+        Node tail1 = null;
+        tail1 = new Node(Integer.MAX_VALUE, MAX_HEIGHT);
+
+        /* Node tail2 = null;
+        tail2 = new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
+
+        Node tail3 = null;
+        tail3 = new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
+
+        Node tail4 = null;
+        tail4 = new Node(Integer.MAX_VALUE, MAX_HEIGHT),false); */
 
         // Test Skiplist
         // Level
@@ -38,7 +47,7 @@ public class TestData
         {
             // Set all of head's 'next' values to the tail
             //head.next[i] = tail;
-        	head.next[i].set(new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
+        	head.next[i] = new AtomicMarkableReference<>(new Node(Integer.MAX_VALUE, MAX_HEIGHT), false);
         }
     }
 
@@ -48,7 +57,7 @@ public class TestData
      * @param preds The collection of predecessor nodes
      * @param succs The collection of successor nodes
      */
-    public static void setupTestSkiplist1(Node head, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs)
+    public static void setupTestSkiplist1(Node head, List<Node> preds, List<Node> succs)
     {
         // Test Skiplist
         // Level
@@ -90,7 +99,7 @@ public class TestData
         head.next[1].set(node5.getReference(), node5.isMarked());
         head.next[2].set(node9.getReference(), node9.isMarked());
         head.next[3].set(tail.getReference(), tail.isMarked());
-        
+
         node2.getReference().next[0].set(node5.getReference(), node5.isMarked());;
 
         node5.getReference().next[0].set(node8.getReference(), node8.isMarked());
@@ -116,6 +125,7 @@ public class TestData
             succs.add(i, null);
         }
     }
+
 
     /**
      * Populates the provided array with a list of consecutive integers

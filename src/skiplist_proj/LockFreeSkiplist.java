@@ -11,7 +11,7 @@ public class LockFreeSkiplist implements Skiplist
 {
 	//static final int MAX_LEVEL = 10;
 	
-    final AtomicMarkableReference<Node> head = new AtomicMarkableReference<>(null, false);
+    Node head = null;
     //final AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
     //private boolean [] foo;
     //Node newTail = new Node(Integer.MAX_VALUE, MAX_HEIGHT);
@@ -26,7 +26,7 @@ public class LockFreeSkiplist implements Skiplist
 		 * this.head.getReference().next[i].set(head.next[i].getReference(),
 		 * head.next[i].isMarked()); }
 		 */
-        this.head.set(head, head.isMarked());
+        this.head = head;
         //this.tail.set(head.next[bottomLevel], head.isMarked());
     }
 
@@ -42,8 +42,8 @@ public class LockFreeSkiplist implements Skiplist
         int bottomLevel = 0;
      // Initialize empty preds and succs lists
        // Node initNode = new Node(null, topLevel + 1);
-        List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
-        List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
+        List<Node> preds = new ArrayList<>();
+        List<Node> succs = new ArrayList<>();
         //for (int i = 0; i < MAX_HEIGHT; i++)
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
@@ -57,20 +57,20 @@ public class LockFreeSkiplist implements Skiplist
         	}else {
         		Node newNode = new Node(value, topLevel);
         		for(int level = bottomLevel; level<= topLevel; level++) {
-        			Node succ = succs.get(level).getReference();
+        			Node succ = succs.get(level);
         			newNode.next[level].set(succ, false);
         		}
         		//AtomicMarkableReference<Node> pred = preds.get(bottomLevel);
-        		Node pred = preds.get(bottomLevel).getReference();
-        		Node succ = succs.get(bottomLevel).getReference();
+        		Node pred = preds.get(bottomLevel);
+        		Node succ = succs.get(bottomLevel);
 
         		if(!pred.next[bottomLevel].compareAndSet(succ, newNode, false, false)) {
         				continue;
         		}
         		for(int level = bottomLevel+1; level<= topLevel; level++) {
         			while(true) {
-        				pred = preds.get(level).getReference();
-        				succ = succs.get(level).getReference();
+        				pred = preds.get(level);
+        				succ = succs.get(level);
         				if(pred.next[level].compareAndSet(succ, newNode, false, false))
         					break;
         				find(value, preds, succs);	
@@ -93,8 +93,8 @@ public class LockFreeSkiplist implements Skiplist
     {
     	int bottomLevel = 0;
         // Initialize empty preds and succs lists
-        List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
-        List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
+        List<Node> preds = new ArrayList<>();
+        List<Node> succs = new ArrayList<>();
         Node succ;
        // Node succ_new;
         for (int i = 0; i <= MAX_HEIGHT; i++)
@@ -108,7 +108,7 @@ public class LockFreeSkiplist implements Skiplist
         	if(!(found != -1)) {
         		return false;
         	}else {
-        		Node nodeToRemove = succs.get(bottomLevel).getReference();
+        		Node nodeToRemove = succs.get(bottomLevel);
         		for(int level = nodeToRemove.getTopLevel(); level>= bottomLevel+1; level--) {
         			boolean[] marked = {false};
         			succ = nodeToRemove.next[level].get(marked);
@@ -122,7 +122,7 @@ public class LockFreeSkiplist implements Skiplist
     			
     			while(true) {
     				boolean iMarkedIt = nodeToRemove.next[bottomLevel].compareAndSet(succ, succ, false, true);
-    				succ = succs.get(bottomLevel).getReference().next[bottomLevel].get(marked);
+    				succ = succs.get(bottomLevel).next[bottomLevel].get(marked);
         			if(iMarkedIt) {
         				find(value, preds, succs);
         				return true;
@@ -133,7 +133,7 @@ public class LockFreeSkiplist implements Skiplist
         }
     }
     @Override
-    public Integer find(Integer value, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs)
+    public Integer find(Integer value, List<Node> preds, List<Node> succs)
     {
      	boolean lfound = true;
     	int lfound_ret = -1;
@@ -142,29 +142,22 @@ public class LockFreeSkiplist implements Skiplist
     	boolean [] marked = {false};
     	boolean snip;
 		//Node succ_temp = null, curr_temp = null;
-		AtomicMarkableReference<Node> pred_save = null, succ_save = null, curr_save = null;
 		Node pred = null, succ = null, curr = null;
     	retry:
     		while(true) {
-    			pred = head.getReference();
-    			pred_save = head;
+    			pred = head;
     			for(int level = MAX_HEIGHT; level >= bottomLevel; level--) {
-    				curr = pred.next[level].getReference(); 
-    				curr_save = pred.next[level];
+    				curr = pred.next[level].getReference();
     				while(true) {
     					succ = curr.next[level].get(marked);
-    					succ_save = curr.next[level];
     					while(marked[0]) {
     						snip = pred.next[level].compareAndSet(curr, succ, false, false);
     						if(!snip) continue retry;
     						curr = pred.next[level].getReference();
-    						curr_save = pred.next[level]; 
     						succ = curr.next[level].get(marked);
-    						succ_save = curr.next[level]; 
     					}
     					if(curr.key< key) {
     						pred = curr; curr = succ;
-    						pred_save = curr_save; curr_save = succ_save;
     					}else {
     						if(curr.key == key && lfound) {
     							lfound = false;
@@ -175,8 +168,8 @@ public class LockFreeSkiplist implements Skiplist
     				}
     				//preds.get(level).set(pred, false);
     				//succs.get(level).set(curr, false);
-    				preds.set(level, pred_save);
-    				succs.set(level, curr_save);
+    				preds.set(level, pred);
+    				succs.set(level, curr);
     			}
     			
     			return lfound_ret;
@@ -216,7 +209,7 @@ public class LockFreeSkiplist implements Skiplist
         {
             System.out.print("Level " + level + ": ");
 
-            Node node = this.head.getReference();
+            Node node = this.head;
 
             while (node != null)
             {

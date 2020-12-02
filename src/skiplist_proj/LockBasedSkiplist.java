@@ -5,29 +5,30 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
+import static skiplist_proj.Skiplist.MAX_HEIGHT;
+
 public class LockBasedSkiplist implements Skiplist
 {
-    private AtomicMarkableReference<Node> head = new AtomicMarkableReference<>(null, false);
+    private Node head = null;
     private static Random rnd = new Random();
 
     public LockBasedSkiplist(Node head)
     {
-        this.head.set(head, false);
+        this.head = head;
     }
 
     /**
      * @param value the value to be added to the Skiplist
      * @return True, if the integer was added to the Skiplist successfully
      */
-    @Override
     public boolean add(Integer value)
     {
         // Chosoe a random level (0 <= x < MAX_HEIGHT) for the new node's top level
         int topLevel = chooseRandomTopLevel();
 
         // Initialize empty preds and succs lists
-        List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
-        List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
+        List<Node> preds = new ArrayList<>();
+        List<Node> succs = new ArrayList<>();
 
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
@@ -44,13 +45,13 @@ public class LockBasedSkiplist implements Skiplist
             if (levelFound != -1)
             {
                 // Get a reference to the successor node
-            	AtomicMarkableReference<Node> nodeFound = succs.get(levelFound);
+            	Node nodeFound = succs.get(levelFound);
 
                 // If the successor node is not marked
-                if (!nodeFound.getReference().isMarked()) {
+                if (!nodeFound.isMarked()) {
 
                     // Wait for it to be fully-linked
-                    while (!nodeFound.getReference().isFullyLinked()) {
+                    while (!nodeFound.isFullyLinked()) {
                         // no-op
                     }
 
@@ -64,8 +65,8 @@ public class LockBasedSkiplist implements Skiplist
 
             try
             {
-            	AtomicMarkableReference<Node> pred;
-            	AtomicMarkableReference<Node> succ;
+            	Node pred;
+            	Node succ;
 
                 boolean valid = true;
 
@@ -75,32 +76,31 @@ public class LockBasedSkiplist implements Skiplist
                 {
                     pred = preds.get(level);
                     succ = succs.get(level);
-                    pred.getReference().lock();
+                    pred.lock();
                     highestLocked = level;
-                    valid = !pred.getReference().isMarked() && !succ.getReference().isMarked() && pred.getReference().next[level].getReference() == succ.getReference();
+                    valid = !pred.isMarked() && !succ.isMarked() && pred.next[level].getReference() == succ;
                 }
 
                 if (!valid) continue;
 
                 // Create the new Node
-                Node node = new Node(value, topLevel);
-                AtomicMarkableReference<Node> newNode = new AtomicMarkableReference<>(node, false);
+                Node newNode = new Node(value, topLevel);
 
                 // Starting at the bottom of the Skiplist
                 // Attach the new Node's successors
                 for (int level = 0; level <= topLevel; level++)
                 {
-                    newNode.getReference().next[level].set(succs.get(level).getReference(), false);
+                    newNode.next[level].set(succs.get(level), false);
                 }
 
                 // Starting at the bottom of the Skiplist
                 // Attach the new Node's predecessors
                 for (int level = 0; level <= topLevel; level++)
                 {
-                    preds.get(level).getReference().next[level] = newNode;
+                    preds.get(level).next[level].set(newNode, false);
                 }
 
-                newNode.getReference().setFullyLinked(true);
+                newNode.setFullyLinked(true);
 
                 return true;
             }
@@ -116,16 +116,15 @@ public class LockBasedSkiplist implements Skiplist
      * @param value the value to be removed from the Skiplist
      * @return True, if the Integer was removed successfully
      */
-    @Override
     public boolean rm(Integer value)
     {
-    	AtomicMarkableReference<Node> victim = null;
+    	Node victim = null;
         boolean isMarked = false;
         Integer topLevel = -1;
 
         // Initialize empty preds and succs lists
-        List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
-        List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
+        List<Node> preds = new ArrayList<>();
+        List<Node> succs = new ArrayList<>();
 
         for (int i = 0; i <= MAX_HEIGHT; i++)
         {
@@ -150,26 +149,27 @@ public class LockBasedSkiplist implements Skiplist
             boolean shouldEvaluateNode = isMarked ||
                     ((levelFound != -1)
                             &&( victim != null)
-                            && (victim.getReference().isFullyLinked()
-                            && victim.getReference().getTopLevel().equals(levelFound)
-                            && !victim.getReference().isMarked()));
+                            && (victim != null)
+                            && (victim.isFullyLinked()
+                            && victim.getTopLevel().equals(levelFound)
+                            && !victim.isMarked()));
 			if(shouldEvaluateNode)
             {
                 if (!isMarked)
                 {
                     // Determine the highest level of the Skiplist that this value
                     // is present on.
-                    topLevel = victim.getReference().getTopLevel();
+                    topLevel = victim.getTopLevel();
 
-                    victim.getReference().lock();
+                    victim.lock();
 
-                    if (victim.getReference().isMarked())
+                    if (victim.isMarked())
                     {
-                        victim.getReference().unlock();
+                        victim.unlock();
                         return false;
                     }
 
-                    victim.getReference().setMarked(true);
+                    victim.setMarked(true);
                     isMarked = true;
                 }
 
@@ -177,7 +177,7 @@ public class LockBasedSkiplist implements Skiplist
 
                 try
                 {
-                	AtomicMarkableReference<Node> pred;
+                	Node pred;
 
                     boolean valid = true;
 
@@ -186,9 +186,9 @@ public class LockBasedSkiplist implements Skiplist
                     for (int level = 0; valid && (level <= topLevel); level++)
                     {
                         pred = preds.get(level);
-                        pred.getReference().lock();
+                        pred.lock();
                         highestLocked = level;
-                        valid = !pred.getReference().isMarked() && pred.getReference().next[level].getReference() == victim.getReference();
+                        valid = !pred.isMarked() && pred.next[level].getReference() == victim;
                     }
 
                     if (!valid) continue;
@@ -198,7 +198,7 @@ public class LockBasedSkiplist implements Skiplist
                     reassignPredecessorNodes(victim, topLevel, preds);
 
                     // The victim has been removed, unlock it
-                    victim.getReference().unlock();
+                    victim.unlock();
 
                     return true;
                 }
@@ -220,11 +220,10 @@ public class LockBasedSkiplist implements Skiplist
      * @param succs the list of successors for the node we are searching for
      * @return The level where the Integer was found, or -1 if it is not present in the Skiplist
      */
-    @Override
-    public Integer find(Integer value, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs)
+    public Integer find(Integer value, List<Node> preds, List<Node> succs)
     {
         // To begin, set the predecessor node to the HEAD of the Skiplist
-    	AtomicMarkableReference<Node> predecessor = head;
+    	Node predecessor = head;
 
         // If the value is not found, we will return -1
         int lFound = -1;
@@ -233,20 +232,20 @@ public class LockBasedSkiplist implements Skiplist
         for (int level = MAX_HEIGHT; level >= 0; level--)
         {
             // Set curr to the predecessor node's successor
-        	AtomicMarkableReference<Node> curr = predecessor.getReference().next[level];
+        	Node curr = predecessor.next[level].getReference();
 
             // If curr is still less than the value we are trying to find
-            while (value > curr.getReference().getItem())
+            while (value > curr.getItem())
             {
                 // Advance the predecessor
                 predecessor = curr;
 
                 // Set curr to the predecessor node's successor
-                curr = predecessor.getReference().next[level];
+                curr = predecessor.next[level].getReference();
             }
 
             // If the key is found, update the return variable
-            if (lFound == -1 && curr.getReference().getItem().equals(value))
+            if (lFound == -1 && curr.getItem().equals(value))
             {
                 lFound = level;
             }
@@ -259,7 +258,6 @@ public class LockBasedSkiplist implements Skiplist
         return lFound;
 	}
 
-	@Override
     public void display()
     {
         System.out.println("---------------------");
@@ -267,7 +265,7 @@ public class LockBasedSkiplist implements Skiplist
         {
             System.out.print("Level " + level + ": ");
 
-            Node node = this.head.getReference();
+            Node node = this.head;
 
             while (node != null)
             {
@@ -292,10 +290,10 @@ public class LockBasedSkiplist implements Skiplist
      * @param nodeCollection The collection of nodes to be unlocked
      * @param highestLocked The highest level where the node is present
      */
-    private void unlockAtAllLevels(List<AtomicMarkableReference<Node>> nodeCollection, int highestLocked) {
+    private void unlockAtAllLevels(List<Node> nodeCollection, int highestLocked) {
         for (int level = 0; level <= highestLocked; level++)
         {
-            nodeCollection.get(level).getReference().unlock();
+            nodeCollection.get(level).unlock();
         }
     }
 
@@ -305,12 +303,12 @@ public class LockBasedSkiplist implements Skiplist
      * @param topLevel The highest level of the Skiplist that we need to consider
      * @param preds The predecessor nodes
      */
-    private void reassignPredecessorNodes(AtomicMarkableReference<Node> victim, Integer topLevel, List<AtomicMarkableReference<Node>> preds) {
+    private void reassignPredecessorNodes(Node victim, Integer topLevel, List<Node> preds) {
         for (int level = topLevel; level >= 0; level--)
         {
-            AtomicMarkableReference<Node> newSuccessor = victim.getReference().next[level];
-            Node predecessor = preds.get(level).getReference();
-            predecessor.next[level] = newSuccessor;
+            Node newSuccessor = victim.next[level].getReference();
+            Node predecessor = preds.get(level);
+            predecessor.next[level].set(newSuccessor, false);
         }
     }
 }

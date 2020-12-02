@@ -20,8 +20,8 @@ public class AddTestsMultithreaded
 {
     private Skiplist skiplist;
 
-    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
+    private static List<Node> preds = new ArrayList<>();
+    private static List<Node> succs = new ArrayList<>();
     private static Node head;
 
     public AddTestsMultithreaded(Skiplist skiplist)
@@ -32,6 +32,8 @@ public class AddTestsMultithreaded
     @Parameterized.Parameters()
     public static Collection<Skiplist> data() {
         ArrayList<Skiplist> testParams = new ArrayList<>();
+        preds = new ArrayList<>();
+        succs = new ArrayList<>();
 
         // Initialize the head node
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
@@ -83,7 +85,9 @@ public class AddTestsMultithreaded
     public void addIntegersToAPopulatedSkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-        int[] listOfIntegersToAdd = {7, 9, 11};
+        this.skiplist.display();
+
+        int[] listOfIntegersToAdd = {7, 20, 21};
         int[] listOfIntegersToRemove = {};
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
         System.out.println("START ADD INTEGERS TO A POPULATED SKIPLIST");
@@ -113,7 +117,7 @@ public class AddTestsMultithreaded
         assertTrue(indexOfAddedItem == 3);
         
         System.out.println("INDEX OF ADDED ITEM == 8: "+ skipListLength);
-        assertTrue(skipListLength == 8);
+        assertTrue(skipListLength == 10);
         System.out.println("END ADD INTEGERS TO A POPULATED SKIPLIST");
     }
 
@@ -125,7 +129,7 @@ public class AddTestsMultithreaded
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
 
-        int[] listOfIntegersToAdd = new int[100];
+        int[] listOfIntegersToAdd = new int[1000];
         TestData.createListOfConsecutiveIntegers(listOfIntegersToAdd);
 
         int[] listOfIntegersToRemove = {};
@@ -151,7 +155,7 @@ public class AddTestsMultithreaded
         }
         System.out.println("INDEX OF ADDED ITEM (100 expected): " + indexOfAddedItem);
         System.out.println("SKIPLIST LENGTH (100 expected): " + skipListLength);
-        assertTrue(indexOfAddedItem == 100);
-        assertTrue(skipListLength == 100);
+        assertTrue(indexOfAddedItem == 1000);
+        assertTrue(skipListLength == 1000);
     }
 }

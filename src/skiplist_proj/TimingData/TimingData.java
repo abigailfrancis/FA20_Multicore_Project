@@ -1,6 +1,5 @@
 package skiplist_proj.TimingData;
 import skiplist_proj.LockBasedSkiplist;
-import skiplist_proj.LockFreeSkiplist;
 import skiplist_proj.Node;
 import skiplist_proj.Skiplist;
 import skiplist_proj.tests.TestData;
@@ -8,7 +7,6 @@ import skiplist_proj.tests.UnitTests.SkiplistRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import static org.junit.Assert.assertTrue;
@@ -20,9 +18,9 @@ import static skiplist_proj.Skiplist.MAX_HEIGHT;
 public class TimingData
 {
 	private static Node head;
-    private Skiplist skiplist;
-    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
+    private LockBasedSkiplist skiplist;
+    private static List<Node> preds = new ArrayList<>();
+    private static List<Node> succs = new ArrayList<>();
     
     public TimingData()
     {
@@ -40,7 +38,7 @@ public boolean TimingTest_add (Integer numOfNodes, boolean useLockBasedSkiplist)
 	    if(useLockBasedSkiplist) {
 	    	this.skiplist = new LockBasedSkiplist(head);
 	    }else {
-	    	this.skiplist = new LockFreeSkiplist(head);
+	    	//this.skiplist = new LockFreeSkiplist(head);
 	    }
 	   
 	    // Act
