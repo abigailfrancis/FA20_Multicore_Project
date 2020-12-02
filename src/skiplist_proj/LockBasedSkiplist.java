@@ -77,7 +77,7 @@ public class LockBasedSkiplist implements Skiplist
                     succ = succs.get(level);
                     pred.getReference().lock();
                     highestLocked = level;
-                    valid = !pred.getReference().isMarked() && !succ.getReference().isMarked() && pred.getReference().next[level] == succ;
+                    valid = !pred.getReference().isMarked() && !succ.getReference().isMarked() && pred.getReference().next[level].getReference() == succ.getReference();
                 }
 
                 if (!valid) continue;
