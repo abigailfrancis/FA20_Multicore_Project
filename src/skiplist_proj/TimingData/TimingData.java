@@ -59,6 +59,25 @@ public boolean TimingTest_rm (Integer numOfNodes, boolean useLockBasedSkiplist) 
     SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
     return true;
 }
+public boolean TimingTest_Demo (Integer numOfNodes, boolean useLockBasedSkiplist) {
+    TestData.setupEmptySkiplist(head);
+    int[] listOfIntegersToAdd = new int[numOfNodes];
+    TestData.createListOfRandomIntegers(listOfIntegersToAdd);
+
+    int[] listOfIntegersToRemove = {};
+    if(useLockBasedSkiplist) {
+    	this.skiplist = new LockBasedSkiplist(head);
+    }else {
+    	this.skiplist = new LockFreeSkiplist(head);
+    }
+    // Act
+    SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
+    this.printSkiplist();
+    //remove
+    SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToRemove, listOfIntegersToAdd);
+    this.printSkiplist();
+    return true;
+}
 public void printSkiplist()
 {
     this.skiplist.display();

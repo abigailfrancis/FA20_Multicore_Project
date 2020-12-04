@@ -8,12 +8,29 @@ public class Main {
 
 	public static void main(String[] args) {
 		// take timing data
-		//System.out.println(Runtime.getRuntime().availableProcessors());
-		RunLockFreeTests();
-		RunLockBasedTests();
+		RunDemo();
+		//RunLockFreeTests();
+		//RunLockBasedTests();
 
 	}
-
+	private static void RunDemo() {
+		long start, end;
+		for (int i = 0; i < 10; i++) {
+			TimingData LockFreeTimingData = new TimingData();
+			TimingData LockBaseTimingData = new TimingData();
+			//lock base
+			start  = System.nanoTime();
+			LockBaseTimingData.TimingTest_Demo(50, false);
+			end = System.nanoTime();
+			System.out.println("Lock Base Execution Time: " + ((end-start)/1000000) + " us");
+			
+			//lock free
+			start  = System.nanoTime();
+			LockFreeTimingData.TimingTest_Demo(50, false);
+			end = System.nanoTime();
+			System.out.println("Lock Free Execution Time: " + ((end-start)/1000000)+ " us");
+		}
+	}
 	private static void RunLockFreeTests() {
 		long[] LF_Add_StartTimes_small = new long[100];
 		long[] LF_Add_EndTimes_small = new long[100];
@@ -26,7 +43,7 @@ public class Main {
 		long[] LF_Rm_EndTimes_large = new long[100];
 
 		// TimingData LockFreeTimingData = new TimingData();
-		for (int i = 0; i < 40; i++) {
+		for (int i = 0; i < 10; i++) {
 			System.out.println("Run " + i);
 			TimingData LockFreeTimingData = new TimingData();
 			// add few nodes
@@ -53,13 +70,13 @@ public class Main {
 			successful = false;
 			while(!successful) {
 				LF_Add_StartTimes_large[i] = System.nanoTime();
-				LockFreeTimingData.TimingTest_add(100, false);
+				LockFreeTimingData.TimingTest_add(50, false);
 				LF_Add_EndTimes_large[i] = System.nanoTime();
 				
-				successful = LockFreeTimingData.isSize(100);
+				successful = LockFreeTimingData.isSize(50);
 				System.out.println(successful);
 				LF_Rm_StartTimes_large[i] = System.nanoTime();
-				LockFreeTimingData.TimingTest_rm(100, false);
+				LockFreeTimingData.TimingTest_rm(50, false);
 				LF_Rm_EndTimes_large[i] = System.nanoTime();
 			}
 
@@ -94,7 +111,7 @@ public class Main {
 
 		// TimingData LockFreeTimingData = new TimingData();
 
-		for (int i = 0; i < 40; i++) {
+		for (int i = 0; i < 10; i++) {
 			TimingData LockBasedTimingData = new TimingData();
 			System.out.println("Run " + i);
 			// add few nodes
@@ -121,14 +138,14 @@ public class Main {
 			successful = false;
 			while(!successful) {
 				LB_Add_StartTimes_large[i] = System.nanoTime();
-				LockBasedTimingData.TimingTest_add(100, false);
+				LockBasedTimingData.TimingTest_add(50, false);
 				LB_Add_EndTimes_large[i] = System.nanoTime();
 	
-				successful = LockBasedTimingData.isSize(100);
+				successful = LockBasedTimingData.isSize(50);
 				System.out.println(successful);
 				 
 				LB_Rm_StartTimes_large[i] = System.nanoTime();
-				LockBasedTimingData.TimingTest_rm(100, false);
+				LockBasedTimingData.TimingTest_rm(50, false);
 				LB_Rm_EndTimes_large[i] = System.nanoTime();
 				System.out.println("clear " + LockBasedTimingData.isSize(0));
 			}
