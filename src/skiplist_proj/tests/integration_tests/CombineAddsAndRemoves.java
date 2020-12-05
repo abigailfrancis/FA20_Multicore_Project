@@ -1,4 +1,4 @@
-package skiplist_proj.tests.integration_tests;
+package skiplist_proj.tests.IntegrationTests;
 
 import org.junit.After;
 import org.junit.Test;
@@ -10,10 +10,11 @@ import skiplist_proj.tests.TestData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import java.util.concurrent.atomic.AtomicMarkableReference;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -21,8 +22,8 @@ public class CombineAddsAndRemoves
 {
     private Skiplist skiplist;
 
-    private static List<AtomicReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicReference<Node>> succs = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
     public CombineAddsAndRemoves(Skiplist skiplist)
@@ -38,8 +39,9 @@ public class CombineAddsAndRemoves
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
 
         // Run with both types of Skiplist
+        testParams.add(new LockFreeSkiplist(head));
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
+        
 
         return testParams;
     }
@@ -51,7 +53,7 @@ public class CombineAddsAndRemoves
     }
 
     /**
-     * Verifies behavior when an integer is added and then removed from a pre-populated Skiplist
+     * Verifies behavior when an integer is added and then removed from the Skiplist
      */
     @Test
     public void addIntegerThenRemoveSameInteger() {
@@ -59,16 +61,18 @@ public class CombineAddsAndRemoves
         TestData.setupTestSkiplist1(head, preds, succs);
 
         // Act
+        this.printSkiplist();
         boolean addSucceeded = this.skiplist.add(3);
+        this.printSkiplist();
         boolean removeSucceeded = this.skiplist.rm(3);
-
+        this.printSkiplist();
         // Assert
         assertTrue(addSucceeded);
         assertTrue(removeSucceeded);
     }
 
     /**
-     * Verifies behavior when an integer is removed from and then added to a pre-populated Skiplist
+     * Verifies behavior when an integer is removed from and then added to the Skiplist
      */
     @Test
     public void removeIntegerAndReAddInteger() {
@@ -85,7 +89,7 @@ public class CombineAddsAndRemoves
     }
 
     /**
-     * Verifies behavior when multiple integers are added to & removed from a pre-populated Skiplist
+     * Verifies behavior when multiple integers are added to & removed from the Skiplist
      */
     @Test
     public void addAndRemoveMultipleIntegers() {
