@@ -4,7 +4,7 @@ import skiplist_proj.Node;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
@@ -18,15 +18,14 @@ public class TestData
         throw new IllegalStateException("Utility class");
     }
     private static Random rand = new Random();
-
     /**
      * Populates head, preds, and succs with values for an empty Skiplist
      * @param head The head node for the Skiplist
      */
     public static void setupEmptySkiplist(Node head)
     {
-        AtomicReference<Node> tail = new AtomicReference<>();
-        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT));
+        AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
+        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
 
         // Test Skiplist
         // Level
@@ -35,10 +34,11 @@ public class TestData
         //   1        head -> tail
         //   0        head -> tail
 
-        for (int i = 0; i < MAX_HEIGHT; i++)
+        for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             // Set all of head's 'next' values to the tail
-            head.next[i] = tail;
+            //head.next[i] = tail;
+        	head.next[i].set(new Node(Integer.MAX_VALUE, MAX_HEIGHT),false);
         }
     }
 
@@ -48,7 +48,7 @@ public class TestData
      * @param preds The collection of predecessor nodes
      * @param succs The collection of successor nodes
      */
-    public static void setupTestSkiplist1(Node head, List<AtomicReference<Node>> preds, List<AtomicReference<Node>> succs)
+    public static void setupTestSkiplist1(Node head, List<AtomicMarkableReference<Node>> preds, List<AtomicMarkableReference<Node>> succs)
     {
         // Test Skiplist
         // Level
@@ -57,55 +57,60 @@ public class TestData
         //   1        head ->      5 ->      9 ->       18 ->       end
         //   0        head -> 2 -> 5 -> 8 -> 9 -> 11 -> 18 -> 25 -> end
 
-        AtomicReference<Node> node2 = new AtomicReference<>();
-        node2.set(createNewFullyLinkedNode(2, 1));
 
-        AtomicReference<Node> node5 = new AtomicReference<>();
-        node5.set(createNewFullyLinkedNode(5, 2));
+        AtomicMarkableReference<Node> node2 = new AtomicMarkableReference<>(null, false);
+        node2.set(createNewFullyLinkedNode(2, 0), false);
 
-        AtomicReference<Node> node8 = new AtomicReference<>();
-        node8.set(createNewFullyLinkedNode(8, 1));
+        AtomicMarkableReference<Node> node5 = new AtomicMarkableReference<>(null, false);
+        node5.set(createNewFullyLinkedNode(5, 1), false);
 
-        AtomicReference<Node> node9 = new AtomicReference<>();
-        node9.set(createNewFullyLinkedNode(9, 3));
+        AtomicMarkableReference<Node> node8 = new AtomicMarkableReference<>(null, false);
+        node8.set(createNewFullyLinkedNode(8, 0), false);
 
-        AtomicReference<Node> node11 = new AtomicReference<>();
-        node11.set(createNewFullyLinkedNode(11, 1));
+        AtomicMarkableReference<Node> node9 = new AtomicMarkableReference<>(null, false);
+        node9.set(createNewFullyLinkedNode(9, 2), false);
 
-        AtomicReference<Node> node18 = new AtomicReference<>();
-        node18.set(createNewFullyLinkedNode(18, 2));
+        AtomicMarkableReference<Node> node11 = new AtomicMarkableReference<>(null, false);
+        node11.set(createNewFullyLinkedNode(11, 0), false);
 
-        AtomicReference<Node> node25 = new AtomicReference<>();
-        node25.set(createNewFullyLinkedNode(25, 1));
+        AtomicMarkableReference<Node> node18 = new AtomicMarkableReference<>(null, false);
+        node18.set(createNewFullyLinkedNode(18, 1), false);
 
-        AtomicReference<Node> tail = new AtomicReference<>();
-        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT));
+        AtomicMarkableReference<Node> node25 = new AtomicMarkableReference<>(null, false);
+        node25.set(createNewFullyLinkedNode(25, 0), false);
 
-        head.next[0] = node2;
-        head.next[1] = node5;
-        head.next[2] = node9;
-        head.next[3] = tail;
+        AtomicMarkableReference<Node> tail = new AtomicMarkableReference<>(null, false);
+        tail.set(new Node(Integer.MAX_VALUE, MAX_HEIGHT), false);
 
-        node2.get().next[0] = node5;
+//        head.next[0] = node2;
+//        head.next[1] = node5;
+//        head.next[2] = node9;
+//        head.next[3] = tail;
+        head.next[0].set(node2.getReference(), node2.isMarked());
+        head.next[1].set(node5.getReference(), node5.isMarked());
+        head.next[2].set(node9.getReference(), node9.isMarked());
+        head.next[3].set(tail.getReference(), tail.isMarked());
+        
+        node2.getReference().next[0].set(node5.getReference(), node5.isMarked());;
 
-        node5.get().next[0] = node8;
-        node5.get().next[1] = node9;
+        node5.getReference().next[0].set(node8.getReference(), node8.isMarked());
+        node5.getReference().next[1].set(node9.getReference(), node9.isMarked());
 
-        node8.get().next[0] = node9;
+        node8.getReference().next[0].set(node9.getReference(), node9.isMarked());
 
-        node9.get().next[0] = node11;
-        node9.get().next[1] = node18;
-        node9.get().next[2] = tail;
+        node9.getReference().next[0].set(node11.getReference(), node11.isMarked());
+        node9.getReference().next[1].set(node18.getReference(), node18.isMarked());
+        node9.getReference().next[2].set(tail.getReference(), tail.isMarked());
 
-        node11.get().next[0] = node18;
+        node11.getReference().next[0].set(node18.getReference(), node18.isMarked());
 
-        node18.get().next[0] = node25;
-        node18.get().next[1] = tail;
+        node18.getReference().next[0].set(node25.getReference(), node25.isMarked());
+        node18.getReference().next[1].set(tail.getReference(), tail.isMarked());
 
-        node25.get().next[0] = tail;
+        node25.getReference().next[0].set(tail.getReference(), tail.isMarked());
 
         // Initialize empty values for preds & succs
-        for (int i = 0; i < MAX_HEIGHT; i++)
+        for (int i = 0; i <= MAX_HEIGHT; i++)
         {
             preds.add(i, null);
             succs.add(i, null);
@@ -127,8 +132,7 @@ public class TestData
      * Populates the provided array with a list of random integers
      * @param listOfIntegers
      */
-    public static void createListOfRandomIntegers(int[] listOfIntegers)
-    {
+    public static void createListOfRandomIntegers(int[] listOfIntegers) {
         for(int i = 0; i < listOfIntegers.length; i++)
         {
             listOfIntegers[i] = rand.nextInt();
