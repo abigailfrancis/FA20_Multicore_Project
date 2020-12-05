@@ -1,4 +1,4 @@
-package skiplist_proj.tests.unit_tests;
+package skiplist_proj.tests.UnitTests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,9 +7,10 @@ import skiplist_proj.*;
 import skiplist_proj.tests.TestData;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -18,8 +19,8 @@ public class FindTests {
     private Skiplist skiplist;
     private static int height = MAX_HEIGHT;
 
-    private static List<AtomicReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicReference<Node>> succs = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
     public FindTests(Skiplist skiplist)
@@ -36,7 +37,7 @@ public class FindTests {
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -46,10 +47,10 @@ public class FindTests {
     {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        this.skiplist.display();
         // Act
         Integer level = this.skiplist.find(5, preds, succs);
-
+        this.skiplist.display();
         // Assert
         assertTrue(level == 1);
     }
@@ -59,10 +60,10 @@ public class FindTests {
     {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        this.skiplist.display();
         // Act
         Integer level = this.skiplist.find(2, preds, succs);
-
+        this.skiplist.display();
         // Assert
         assertTrue(level == 0);
     }
@@ -72,11 +73,13 @@ public class FindTests {
     {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        this.skiplist.display();
         // Act
         Integer level = this.skiplist.find(500, preds, succs);
-
+        this.skiplist.display();
         // Assert
         assertTrue(level == -1);
     }
+
+    // Todo: add tests with multiple threads
 }
