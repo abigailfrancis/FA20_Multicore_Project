@@ -1,19 +1,21 @@
-package skiplist_proj.tests.integration_tests;
+package skiplist_proj.tests.IntegrationTests;
 
+//import jdk.jshell.spi.ExecutionControl;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import skiplist_proj.*;
 import skiplist_proj.tests.TestData;
-import skiplist_proj.tests.unit_tests.SkiplistRunnable;
+import skiplist_proj.tests.UnitTests.SkiplistRunnable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -21,8 +23,8 @@ public class CombineAddsAndRemovesMultithreaded
 {
     private Skiplist skiplist;
 
-    private static List<AtomicReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicReference<Node>> succs = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
     public CombineAddsAndRemovesMultithreaded(Skiplist skiplist)
@@ -38,9 +40,9 @@ public class CombineAddsAndRemovesMultithreaded
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
 
         // Run with both types of Skiplist
+        testParams.add(new LockFreeSkiplist(head));
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
-
+        
         return testParams;
     }
 
@@ -75,14 +77,14 @@ public class CombineAddsAndRemovesMultithreaded
         // Assert
         // Verify that the bottom level contains at least Node 98 and 99
         // (The rest of the nodes may or may not be present depending on when the individual threads executed)
-        Node node = head.next[0].get();
+        Node node = head.next[0].getReference();
         boolean found148 = false;
         boolean found149 = false;
         while (node.getItem() != Integer.MAX_VALUE) {
             if (node.getItem() == 148) found148 = true;
             if (node.getItem() == 149) found149 = true;
 
-            node = node.next[0].get();
+            node = node.next[0].getReference();
         }
         assertTrue(found148);
         assertTrue(found149);
@@ -113,7 +115,7 @@ public class CombineAddsAndRemovesMultithreaded
         // Assert
         // Verify that the bottom level contains at least Node 98 and 99
         // (The rest of the nodes may or may not be present depending on when the individual threads executed)
-        Node node = head.next[0].get();
+        Node node = head.next[0].getReference();
         boolean found148 = false;
         boolean found149 = false;
         while (node.getItem() != Integer.MAX_VALUE)
@@ -121,7 +123,7 @@ public class CombineAddsAndRemovesMultithreaded
             if (node.getItem() == 148) found148 = true;
             if (node.getItem() == 149) found149 = true;
 
-            node = node.next[0].get();
+            node = node.next[0].getReference();
         }
         assertTrue(found148);
         assertTrue(found149);
