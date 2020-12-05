@@ -1,4 +1,4 @@
-package skiplist_proj.tests.unit_tests;
+package skiplist_proj.tests.UnitTests;
 
 import org.junit.After;
 import org.junit.Test;
@@ -10,10 +10,10 @@ import skiplist_proj.tests.TestData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -21,8 +21,8 @@ public class RemoveTestsMultithreaded
 {
     private Skiplist skiplist;
 
-    private static List<AtomicReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicReference<Node>> succs = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
     private static Node head;
 
     public RemoveTestsMultithreaded(Skiplist skiplist)
@@ -39,7 +39,7 @@ public class RemoveTestsMultithreaded
 
         // Run with both types of Skiplist
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
+        testParams.add(new LockFreeSkiplist(head));
 
         return testParams;
     }
@@ -63,9 +63,9 @@ public class RemoveTestsMultithreaded
 
         // Act
         SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
-
+       // SkiplistRunnable.runTest(false, this.head, listOfIntegersToAdd, listOfIntegersToRemove);
         // Assert
-        Node node1 = head.next[0].get();
+        Node node1 = head.next[0].getReference();
         assertTrue(node1.getItem() == Integer.MAX_VALUE);
     }
 
@@ -79,14 +79,14 @@ public class RemoveTestsMultithreaded
         int[] listOfIntegersToAdd = {};
         int[] listOfIntegersToRemove = {2, 5, 8, 9, 11, 18, 25};
         boolean useLockBasedSkiplist = this.skiplist instanceof LockBasedSkiplist;
-
+        this.skiplist.display();
         // Act
         SkiplistRunnable.runTest(useLockBasedSkiplist, head, listOfIntegersToAdd, listOfIntegersToRemove);
-
+        this.skiplist.display();
         // Assert
-        for (int i = 0; i < MAX_HEIGHT; i++)
+        for (int i = 0; i <= MAX_HEIGHT; i++)
         {
-            Node node1 = head.next[i].get();
+            Node node1 = head.next[i].getReference();
             assertTrue(node1.getItem() == Integer.MAX_VALUE);
         }
     }
