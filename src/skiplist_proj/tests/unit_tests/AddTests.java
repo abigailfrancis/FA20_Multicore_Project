@@ -1,4 +1,4 @@
-package skiplist_proj.tests.unit_tests;
+package skiplist_proj.tests.UnitTests;
 
 import org.junit.After;
 import org.junit.Test;
@@ -10,10 +10,12 @@ import skiplist_proj.tests.TestData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import java.util.concurrent.atomic.AtomicMarkableReference;
+//import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+//import static junit.framework.Assert.assertFalse;
+//import static junit.framework.Assert.assertTrue;
 import static skiplist_proj.Skiplist.MAX_HEIGHT;
 
 @RunWith(Parameterized.class)
@@ -21,10 +23,10 @@ public class AddTests
 {
     private Skiplist skiplist;
 
-    private static List<AtomicReference<Node>> preds = new ArrayList<>();
-    private static List<AtomicReference<Node>> succs = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> preds = new ArrayList<>();
+    private static List<AtomicMarkableReference<Node>> succs = new ArrayList<>();
     private static Node head;
-
+   
     public AddTests(Skiplist skiplist)
     {
         this.skiplist = skiplist;
@@ -38,8 +40,8 @@ public class AddTests
         head = new Node(Integer.MIN_VALUE, MAX_HEIGHT);
 
         // Run with both types of Skiplist
+        testParams.add(new LockFreeSkiplist(head));
         testParams.add(new LockBasedSkiplist(head));
-        testParams.add(new LockFree());
 
         return testParams;
     }
@@ -49,7 +51,6 @@ public class AddTests
     {
         this.skiplist.display();
     }
-
     /**
      * Verifies behavior when one integer is added to an empty Skiplist
      */
@@ -57,10 +58,10 @@ public class AddTests
     public void addIntegerToAnEmptySkiplist() {
         // Arrange
         TestData.setupEmptySkiplist(head);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(5);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }
@@ -72,10 +73,10 @@ public class AddTests
     public void addIntegerToAFullSkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(15);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }
@@ -87,10 +88,10 @@ public class AddTests
     public void addIntegerToASkiplistThatAlreadyHasThatInteger() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(5);
-
+        printSkiplist();
         // Assert
         assertFalse(addSucceeded);
     }
@@ -102,10 +103,10 @@ public class AddTests
     public void addIntegerToFrontOfSkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(1);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }
@@ -117,10 +118,10 @@ public class AddTests
     public void addIntegerToEndOfSkiplist() {
         // Arrange
         TestData.setupTestSkiplist1(head, preds, succs);
-
+        printSkiplist();
         // Act
         boolean addSucceeded = this.skiplist.add(500);
-
+        printSkiplist();
         // Assert
         assertTrue(addSucceeded);
     }
